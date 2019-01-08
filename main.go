@@ -220,12 +220,12 @@ func runModule(name string, module string, env map[string]string) {
 	}
 	// logger := log.New(f, fmt.Sprintf("[%s]", name), log.lstdFlags)
 	for {
-		log.Printf("[%s] exec: npx %s", name, module)
+		log.Printf("[%s] exec: %s", name, module)
 		lenv := os.Environ()
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
-		cmd := exec.Command("npx", module)
+		cmd := exec.Command(path.Join("node_modules",".bin", module))
 		cmd.Stdout = f
 		cmd.Stderr = f
 		cmd.Env = lenv
