@@ -1,0 +1,15 @@
+env:
+  backend:
+    STEAM_KEY: <YourSteamKey>
+  common:
+    MONGO_HOST: localhost
+    REDIS_HOST: localhost
+version: latest
+mods:
+- screepsmod-mongo
+- screepsmod-auth
+bots:
+  simplebot: "screepsbot-zeswarm"
+extraPackages:
+  morgan: "*"
+localMods: ./mods
