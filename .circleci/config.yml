@@ -15,7 +15,7 @@ jobs:
     - run: 
         name: "Build All"
         command: |
-          cp config.sample.yml dist/
+          cp VERSION config.sample.yml dist/
           bash build.sh $(cat VERSION)
     - save_cache:
         key: v1-pkg-cache
@@ -40,16 +40,19 @@ jobs:
     - run:
         name: "Publish Release on GitHub"
         command: |
-          VERSION=$(cat VERSION)
+          VERSION=$(cat ./artifacts/VERSION)
+          rm ./artifacts/VERSION
           ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 workflows:
   version: 2
   main:
     jobs:
     - build:
-       filters:
-         tags:
-           only: /.*/
+        filters:
+          branches:
+            only: /.*/
+          tags:
+             only: /.*/
     - publish-github-release:
         requires:
         - build
