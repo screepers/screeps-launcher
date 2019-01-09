@@ -2,7 +2,7 @@
 
 ## Usage:
 1. Drop in an empty folder
-2. Get your (Steam API key)[https://steamcommunity.com/dev/apikey]
+2. Get your [Steam API key](https://steamcommunity.com/dev/apikey)
 3. Create config.yml
   ```yaml
   env:
