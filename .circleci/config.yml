@@ -1,0 +1,51 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+    - image: circle/golang:1.11
+    working_directory: /go/src/github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+        - v1-pkg-cache
+    - run: go get -d -v ./...
+    - run: go install -v ./...
+    - run: 
+        name: "Build All"
+        command: |
+          bash build.sh $(cat VERSION)
+    - save_cache:
+        key: v1-pkg-cache
+        paths:
+        - "/go/pkg"
+    - store_artifacts:
+        path: config.sample.yml
+        destination: config.sample.yml
+    - store_artifacts:
+        path: dist
+  publish-github-release:
+    docker:
+    - image: cibuilds/github:0.10
+    steps:
+    - attach_workspace:
+        at: ./artifacts
+    - run:
+        name: "Publish Release on GitHub"
+        command: |
+          VERSION=$(cat VERSION)
+          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
+workflows:
+  version: 2
+  main:
+    jobs:
+    - build:
+    - publish-github-release:
+        requires:
+        - build
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /^v[0-9.]+$/
