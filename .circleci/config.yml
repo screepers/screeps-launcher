@@ -15,7 +15,7 @@ jobs:
     - run: 
         name: "Build All"
         command: |
-          copy config.sample.yml dist/
+          cp config.sample.yml dist/
           bash build.sh $(cat VERSION)
     - save_cache:
         key: v1-pkg-cache
@@ -26,6 +26,7 @@ jobs:
         destination: config.sample.yml
     - store_artifacts:
         path: dist
+        destination: ''
     - persist_to_workspace:
         root: dist
         paths:
