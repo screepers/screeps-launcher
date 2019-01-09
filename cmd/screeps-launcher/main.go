@@ -36,39 +36,46 @@ type PackageJson struct {
 }
 
 func NewConfig() *Config {
-	ce := ConfigEnv{}
-	ce.Shared = map[string]string{
-		"MODFILE": "mods.json",
+	return &Config{
+		Processors: 2,
+		Version: "latest",
+		Env: &ConfigEnv{
+			Shared: map[string]string{
+				"MODFILE": "mods.json",
+				"STORAGE_HOST": "127.0.0.1",
+				"STORAGE_PORT": "21027",
+			},
+			Backend: map[string]string{
+				"GAME_HOST": "0.0.0.0",
+				"GAME_PORT": "21025",
+				"CLI_HOST":  "127.0.0.1",
+				"CLI_PORT":  "21026",
+				"ASSET_DIR": "assets",
+			},
+			Engine: map[string]string{
+				"DRIVER_MODULE": "@screeps/driver",
+			},
+			Storage: map[string]string{
+				"DB_PATH": "db.json",
+			},
+		},
+		Mods: make([]string, 0),
+		Bots: make(map[string]string),
+		ExtraPackages: make(map[string]string),
 	}
-	ce.Backend = map[string]string{
-		"GAME_HOST": "0.0.0.0",
-		"GAME_PORT": "21025",
-		"CLI_HOST":  "127.0.0.1",
-		"CLI_PORT":  "21026",
-		"ASSET_DIR": "assets",
-	}
-	ce.Engine = map[string]string{
-		"DRIVER_MODULE": "@screeps/driver",
-	}
-	ce.Storage = map[string]string{}
-	c := Config{}
-	c.Processors = 2
-	c.Env = &ce
-	c.Mods = make([]string, 0)
-	c.Bots = make(map[string]string)
-	c.ExtraPackages = make(map[string]string)
-	return &c
 }
 
 func (c *Config) GetConfig() *Config {
 	configFile, err := ioutil.ReadFile("config.yml")
-	check(err)
-	err = yaml.Unmarshal(configFile, c)
-	check(err)
+	if err == nil {
+		err = yaml.Unmarshal(configFile, c)
+		check(err)
+	}
 	c.Env.Shared["MODFILE"] = "mods.json"
 	for key, val := range c.Env.Shared {
 		c.Env.Backend[key] = val
 		c.Env.Engine[key] = val
+		c.Env.Storage[key] = val
 	}
 	return c
 }
