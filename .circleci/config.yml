@@ -15,6 +15,7 @@ jobs:
     - run: 
         name: "Build All"
         command: |
+          copy config.sample.yml dist/
           bash build.sh $(cat VERSION)
     - save_cache:
         key: v1-pkg-cache
@@ -25,6 +26,10 @@ jobs:
         destination: config.sample.yml
     - store_artifacts:
         path: dist
+    - persist_to_workspace:
+        root: dist
+        paths:
+        - '*'
   publish-github-release:
     docker:
     - image: cibuilds/github:0.10
@@ -40,7 +45,7 @@ workflows:
   version: 2
   main:
     jobs:
-    - build:
+    - build
     - publish-github-release:
         requires:
         - build
