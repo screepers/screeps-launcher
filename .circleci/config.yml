@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-    - image: circle/golang:1.11
+    - image: circleci/golang:1.11
     working_directory: /go/src/github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
     steps:
     - checkout
