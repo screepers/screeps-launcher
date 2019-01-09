@@ -7,7 +7,7 @@ RUN CGO_ENABLED=0 \
     GOARCH=amd64 \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
-FROM node:8.11
+FROM node:8.15
 VOLUME /screeps
 WORKDIR /screeps
 COPY --from=builder /go/src/github/ags131/screeps-launcher .
