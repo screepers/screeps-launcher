@@ -38,10 +38,10 @@ type PackageJson struct {
 func NewConfig() *Config {
 	return &Config{
 		Processors: 2,
-		Version: "latest",
+		Version:    "latest",
 		Env: &ConfigEnv{
 			Shared: map[string]string{
-				"MODFILE": "mods.json",
+				"MODFILE":      "mods.json",
 				"STORAGE_HOST": "127.0.0.1",
 				"STORAGE_PORT": "21027",
 			},
@@ -59,8 +59,8 @@ func NewConfig() *Config {
 				"DB_PATH": "db.json",
 			},
 		},
-		Mods: make([]string, 0),
-		Bots: make(map[string]string),
+		Mods:          make([]string, 0),
+		Bots:          make(map[string]string),
 		ExtraPackages: make(map[string]string),
 	}
 }
@@ -87,6 +87,14 @@ func check(err error) {
 }
 
 func main() {
+	instCmd := "yarn"
+	if !cmdExists("npm") {
+		log.Fatalln("npm not found! Install nodejs.")
+	}
+	if !cmdExists("yarn") {
+		instCmd = "npm"
+		log.Println("yarn not found, while not required, it is recommended")
+	}
 	c := NewConfig()
 	c.GetConfig()
 	needsInit := false
@@ -95,8 +103,12 @@ func main() {
 	}
 	log.Print("Writing package.json")
 	writePackage(c)
-	log.Println("Running yarn")
-	runYarn()
+	log.Printf("Running %s\n", instCmd)
+	if instCmd == "yarn" {
+		runYarn()
+	} else {
+		runNpm()
+	}
 	if needsInit {
 		log.Print("Initializing server")
 		initServer(c)
@@ -106,6 +118,11 @@ func main() {
 	log.Print("Starting Server")
 	runServer(c)
 	select {} // Wait Forever
+}
+
+func cmdExists(cmdName string) bool {
+	_, err := exec.LookPath(cmdName)
+	return err == nil
 }
 
 func initServer(c *Config) {
@@ -199,6 +216,14 @@ func runYarn() {
 	check(err)
 }
 
+func runNpm() {
+	cmd := exec.Command("npm install")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	check(err)
+}
+
 func runServer(c *Config) {
 	needsStorage := true
 	for _, mod := range c.Mods {
@@ -232,7 +257,7 @@ func runModule(name string, module string, env map[string]string) {
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
-		cmd := exec.Command(path.Join("node_modules",".bin", module))
+		cmd := exec.Command(path.Join("node_modules", ".bin", module))
 		cmd.Stdout = f
 		cmd.Stderr = f
 		cmd.Env = lenv
