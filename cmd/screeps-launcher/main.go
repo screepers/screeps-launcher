@@ -21,6 +21,7 @@ type ConfigEnv struct {
 	Storage map[string]string `yaml:"storage"`
 }
 type Config struct {
+	SteamKey			string						`yaml:"steamKey"`
 	Env           *ConfigEnv        `yaml:"env"`
 	Processors    int               `yaml:"processors"`
 	Version       string            `yaml:"version"`
@@ -76,6 +77,9 @@ func (c *Config) GetConfig() *Config {
 		c.Env.Backend[key] = val
 		c.Env.Engine[key] = val
 		c.Env.Storage[key] = val
+	}
+	if c.SteamKey != "" {
+		c.Env.Backend["SteamKey"] = c.SteamKey
 	}
 	return c
 }

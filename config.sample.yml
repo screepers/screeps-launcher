@@ -1,6 +1,5 @@
+steamKey: <YourSteamKey>
 env:
-  backend:
-    STEAM_KEY: <YourSteamKey>
   common:
     MONGO_HOST: localhost
     REDIS_HOST: localhost
