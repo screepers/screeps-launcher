@@ -1,14 +1,12 @@
 # A better launcher for Screeps private servers
 
 ## Usage:
-1. Download a release from the [Releases](releases/latest) Page
+1. Download a release from the [Releases](https://github.com/ags131/screeps-launcher/blob/master/releases/latest) Page
 2. Drop into an empty folder or your PATH
 3. Get your [Steam API key](https://steamcommunity.com/dev/apikey)
 4. Create config.yml (All fields are optional! You can pass STEAM_KEY as an environment variable)
   ```yaml
-  env:
-    backend:
-      STEAM_KEY: keyFromStep2
+  steamKey: keyFromStep2
   mods:
   - screepsmod-auth
   bots:
