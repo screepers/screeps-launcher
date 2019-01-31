@@ -6,5 +6,7 @@ do
 	go build -o $(basename $D)-${GOOS}-${GOARCH}.exe $D
 	export GOOS=linux
 	go build -o $(basename $D)-${GOOS}-${GOARCH} $D
+	export GOOS=darwin
+	go build -o $(basename $D)-${GOOS}-${GOARCH} $D
 done
 popd
