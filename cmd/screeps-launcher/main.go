@@ -21,7 +21,7 @@ type ConfigEnv struct {
 	Storage map[string]string `yaml:"storage"`
 }
 type Config struct {
-	SteamKey			string						`yaml:"steamKey"`
+	SteamKey      string            `yaml:"steamKey"`
 	Env           *ConfigEnv        `yaml:"env"`
 	Processors    int               `yaml:"processors"`
 	Version       string            `yaml:"version"`
@@ -186,6 +186,7 @@ func writeMods(c *Config) {
 	}
 
 	if c.LocalMods != "" {
+		os.MkdirAll(c.LocalMods, 0777)
 		files, err := ioutil.ReadDir(c.LocalMods)
 		check(err)
 		for _, file := range files {
