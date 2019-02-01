@@ -2,12 +2,15 @@ package install
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"runtime"
 	"encoding/json"	
 	"io/ioutil"
 	"net/http"
 	"time"
-	_ "github.com/cavaliercoder/grab"
+	"strings"
+	"github.com/cavaliercoder/grab"
 )
 
 type NodeVersion struct {
@@ -23,12 +26,41 @@ type NodeVersion struct {
 	Lts interface{}
 }
 
-func Download(url string, dest string) error {
+func download(dest string, url string) error {
+	client := grab.NewClient()
+	req, _ := grab.NewRequest(dest, url)
+	log.Printf("Downloading %v...\n", req.URL())
+	resp := client.Do(req)
+	log.Printf("  %v\n", resp.HTTPResponse.Status)
+	t := time.NewTicker(1 * time.Second)
+	defer t.Stop()
+
+	Loop:
+	for {
+		select {
+		case <-t.C:
+			log.Printf("  downloaded %v/%v bytes (%.2f%%)\n", 
+				resp.BytesComplete(),
+				resp.Size,
+				100 * resp.Progress())
+		case <-resp.Done:
+			break Loop
+		}
+	}
+	if err := resp.Err(); err != nil {
+		log.Printf("Download failed: %v\n", err)
+		return err
+	}
+	log.Printf("Download completed")
 	return nil
 }
 
-func InstallMongo() error {}
-func InstallRedis() error {}
+func InstallMongo() error {
+	return nil
+}
+func InstallRedis() error {
+	return nil
+}
 
 func InstallNode(version string) error {
 	url := "https://nodejs.org/dist/index.json"
@@ -72,8 +104,25 @@ func InstallNode(version string) error {
 	file := getFileName(runtime.GOOS, runtime.GOARCH, ver)
 
 	url = fmt.Sprintf("https://nodejs.org/dist/%s/%s", ver, file)	
-	
-	fmt.Println(version)
+
+	download(fmt.Sprintf("./%s", file), url)
+
+	f, err := os.OpenFile(file, os.O_RDONLY, 0644)
+	if err != nil {
+		return err
+	}
+	ExtractTarGz("deps", f)
+	name := file
+	if runtime.GOOS == "windows" {
+		name = strings.TrimSuffix(name, ".zip")
+	} else {
+		name = strings.TrimSuffix(name, ".tar.gz")
+	}
+	log.Print(name)
+	err = os.Rename(fmt.Sprintf("deps/%s", name), "deps/node")
+	if err != nil {
+		return err
+	}	
 	return nil
 }
 
