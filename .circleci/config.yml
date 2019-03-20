@@ -4,13 +4,12 @@ jobs:
   build:
     docker:
     - image: circleci/golang:1.11
-    working_directory: /go/src/github.com/ags131/screeps-launcher
     steps:
     - checkout
     - restore_cache:
         keys:
         - v1-pkg-cache
-    - run: go get -d -v ./...
+    - run: go vet -d -v ./...
     - run: go test -v ./...
     - run: go install -v ./...
     - run: 
