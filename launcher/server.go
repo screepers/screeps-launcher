@@ -51,6 +51,7 @@ func runModule(name string, module string, env map[string]string) {
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
+		fmt.Fprintf(f, "==== %s Starting ====\n", name)
 		cmd := exec.Command(path.Join("deps", "node", "bin", "node"), path.Join("node_modules", ".bin", module))
 		newPath := filepath.SplitList(os.Getenv("PATH"))
 		cwd, _ := os.Getwd()
@@ -61,6 +62,7 @@ func runModule(name string, module string, env map[string]string) {
 		cmd.Env = lenv
 		err := cmd.Run()
 		log.Printf("[%s] Exited with error: %v", name, err)
+		fmt.Fprintf(f, "==== %s Exited ====\n", name)
 		if err != nil {
 			time.Sleep(1 * time.Second) // Wait before trying to restart
 		}

@@ -81,7 +81,8 @@ func writeMods(c *Config) error {
 		Bots map[string]string `json:"bots"`
 	}
 
-	if c.LocalMods != "" {
+	if c.LocalMods != "" {		
+		os.MkdirAll(c.LocalMods, 0777)
 		files, err := ioutil.ReadDir(c.LocalMods)
 		if err != nil {
 			return err

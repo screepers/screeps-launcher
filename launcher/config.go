@@ -68,7 +68,7 @@ func (c *Config) GetConfig() (*Config, error) {
 		c.Env.Storage[key] = val
 	}
 	if c.SteamKey != "" {
-		c.Env.Backend["SteamKey"] = c.SteamKey
+		c.Env.Backend["STEAM_KEY"] = c.SteamKey
 	}
 	return c, nil
 }
