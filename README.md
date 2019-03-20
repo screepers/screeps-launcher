@@ -23,10 +23,17 @@ No need to manually `npm install` anything, its handled automatically
   ```
 5. Open a shell to folder
 6. Run `screeps-launcher`
-7. If you installed `screepsmod-mongo`, run `npx screeps cli` in another shell, and run `system.resetAllData()` to init the DB. It completes instantly, restart the server after.
+7. If you installed `screepsmod-mongo`, run `screeps-launcher cli` in another shell, and run `system.resetAllData()` to init the DB. It completes instantly, restart the server after.
 8. Done!
 
-You can use `npx screeps cli` in the same folder for CLI access
+You can use `screeps-launcher cli` in the same folder for CLI access
+
+### Other options
+
+There are several extra arguments that can be used to manage the install:
+`screeps-launcer apply` Applies the current config.yml without starting the server.
+`screeps-launcer upgrade` Upgrades all packages (screeps, mods, bots, etc)
+`screeps-launcer cli` Launch a screeps cli
 
 ## Docker
 
