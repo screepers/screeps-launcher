@@ -12,3 +12,17 @@ bots:
 extraPackages:
   morgan: "*"
 localMods: ./mods
+serverMod:
+  welcomeText:  |
+    <style>.screepsplus h1{  text-align: center; }</style>
+    <div class="screepsplus">
+    <h1>ScreepsPlus</h1>
+    Wecome to the ScreepsPlus private server.<br>
+    Mods include screepsmod-auth and several custom mods to enable email notifications, control tickrate, power banks, portals, and other internal improvements.<br><br>
+    <div style="text-align: center">
+    This server is funded by backers on Patreon. <br>
+    <a target="_blank" href="https://www.patreon.com/bePatron?u=6867142" ><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"></a>
+    </div>
+  constants:
+    TEST_CONSTANT: 123
+  tickRate: 1000

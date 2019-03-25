@@ -16,7 +16,11 @@ func main() {
 	var err error
 	l := launcher.Launcher{}
 	l.Prepare()
-	switch os.Args[1] {
+	cmd := "start"
+	if len(os.Args) >= 1 {
+		cmd = os.Args[1]
+	}
+	switch cmd {
 	case "init":
 		err = l.Apply()
 	case "apply":
