@@ -61,6 +61,13 @@ func (c *Config) GetConfig() (*Config, error) {
 			return nil, err
 		}
 	}
+	configFile, err := ioutil.ReadFile("config.yaml")
+	if err == nil {
+		err = yaml.Unmarshal(configFile, c)
+		if err != nil {
+			return nil, err
+		}
+	}
 	c.Env.Shared["MODFILE"] = "mods.json"
 	for key, val := range c.Env.Shared {
 		c.Env.Backend[key] = val

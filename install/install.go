@@ -191,7 +191,7 @@ func InstallYarn() error {
 		return err
 	}
 	f.Close()
-	//os.Remove(file)
+	os.Remove(file)
 	name := strings.TrimSuffix(file, ".tar.gz")
 	log.Print(name)
 	err = os.Rename(fmt.Sprintf("deps/%s", name), "deps/yarn")
