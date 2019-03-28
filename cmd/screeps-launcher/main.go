@@ -17,7 +17,7 @@ func main() {
 	l := launcher.Launcher{}
 	l.Prepare()
 	cmd := "start"
-	if len(os.Args) >= 1 {
+	if len(os.Args) > 1 {
 		cmd = os.Args[1]
 	}
 	switch cmd {
