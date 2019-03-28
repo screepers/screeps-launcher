@@ -3,6 +3,7 @@ package launcher
 import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"log"
 )
 
 type ConfigEnv struct {
@@ -54,18 +55,15 @@ func NewConfig() *Config {
 }
 
 func (c *Config) GetConfig() (*Config, error) {
-	configFile, err := ioutil.ReadFile("config.yml")
-	if err == nil {
-		err = yaml.Unmarshal(configFile, c)
-		if err != nil {
-			return nil, err
-		}
-	}
-	configFile, err := ioutil.ReadFile("config.yaml")
-	if err == nil {
-		err = yaml.Unmarshal(configFile, c)
-		if err != nil {
-			return nil, err
+	files := []string{"config.yml", "config.yaml"}
+	for _, file := range files {
+		configFile, err := ioutil.ReadFile(file)
+		if err == nil {
+			err = yaml.Unmarshal(configFile, c)
+			if err != nil {
+				return nil, err
+			}
+			log.Printf("Loaded config from %s", file)
 		}
 	}
 	c.Env.Shared["MODFILE"] = "mods.json"

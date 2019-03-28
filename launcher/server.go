@@ -47,16 +47,16 @@ func runModule(name string, module string, env map[string]string) {
 	// logger := log.New(f, fmt.Sprintf("[%s]", name), log.lstdFlags)
 	for {
 		log.Printf("[%s] exec: %s", name, module)
+		newPath := filepath.SplitList(os.Getenv("PATH"))
+		cwd, _ := os.Getwd()
+		newPath = append([]string{path.Join(cwd, "deps", "node", "bin")}, newPath...)
+		env["PATH"] = strings.Join(newPath, string(filepath.ListSeparator))
 		lenv := os.Environ()
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
 		fmt.Fprintf(f, "==== %s Starting ====\n", name)
 		cmd := exec.Command(path.Join("deps", "node", "bin", "node"), path.Join("node_modules", ".bin", module))
-		newPath := filepath.SplitList(os.Getenv("PATH"))
-		cwd, _ := os.Getwd()
-		newPath = append([]string{path.Join(cwd, "deps", "node", "bin")}, newPath...)
-		cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
 		cmd.Stdout = f
 		cmd.Stderr = f
 		cmd.Env = lenv

@@ -15,7 +15,10 @@ type Launcher struct {
 
 func (l *Launcher) Prepare() {
 	c := NewConfig()
-	c.GetConfig()
+	_, err := c.GetConfig()
+	if err != nil {
+		log.Fatalf("Error loading config: %v", err)
+	}
 	l.config = c
 	l.needsInit = false
 	if _, err := os.Stat("package.json"); os.IsNotExist(err) {
