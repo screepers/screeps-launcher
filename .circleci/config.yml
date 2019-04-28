@@ -15,8 +15,7 @@ jobs:
     - run: 
         name: "Build All"
         command: |
-          cp VERSION config.sample.yml dist/
-          bash build.sh $(cat VERSION)
+          bash build.sh
     - save_cache:
         key: v1-pkg-cache
         paths:
@@ -40,8 +39,7 @@ jobs:
     - run:
         name: "Publish Release on GitHub"
         command: |
-          VERSION=$(cat ./artifacts/VERSION)
-          rm ./artifacts/VERSION
+          VERSION=${CIRCLE_TAG}
           ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
 workflows:
   version: 2
