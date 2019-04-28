@@ -4,30 +4,37 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"math"
+	"runtime"
+	"strconv"
 )
 
 type ConfigEnv struct {
-	Shared  map[string]string `yaml:"shared"`
-	Backend map[string]string `yaml:"backend"`
-	Engine  map[string]string `yaml:"engine"`
-	Storage map[string]string `yaml:"storage"`
+	Shared  map[string]string `yaml:"shared" json:"shared"`
+	Backend map[string]string `yaml:"backend" json:"backend"`
+	Engine  map[string]string `yaml:"engine" json:"engine"`
+	Storage map[string]string `yaml:"storage" json:"storage"`
 }
 
 type Config struct {
-	SteamKey      string            `yaml:"steamKey"`
-	Env           *ConfigEnv        `yaml:"env"`
-	Processors    int               `yaml:"processors"`
-	Version       string            `yaml:"version"`
-	Mods          []string          `yaml:"mods"`
-	Bots          map[string]string `yaml:"bots"`
-	ExtraPackages map[string]string `yaml:"extraPackages"`
-	LocalMods     string            `yaml:"localMods"`
+	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
+	Env           *ConfigEnv        `yaml:"env" json:"env"`
+	Processors    int               `yaml:"processors" json:"processors"`
+	RunnerThreads int               `yaml:"runnerThreads" json:"runnerThreads"`
+	Version       string            `yaml:"version" json:"version"`
+	Mods          []string          `yaml:"mods" json:"mods"`
+	Bots          map[string]string `yaml:"bots" json:"bots"`
+	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
+	LocalMods     string            `yaml:"localMods" json:"localMods"`
 }
 
 func NewConfig() *Config {
+	cores := runtime.NumCPU()
+	runners := math.Max(1, float64(cores)-1)
 	return &Config{
-		Processors: 2,
-		Version:    "latest",
+		Processors:    cores,
+		RunnerThreads: int(runners),
+		Version:       "latest",
 		Env: &ConfigEnv{
 			Shared: map[string]string{
 				"MODFILE":      "mods.json",
@@ -71,6 +78,9 @@ func (c *Config) GetConfig() (*Config, error) {
 		c.Env.Backend[key] = val
 		c.Env.Engine[key] = val
 		c.Env.Storage[key] = val
+	}
+	if c.RunnerThreads > 0 {
+		c.Env.Engine["RUNNER_THREADS"] = strconv.Itoa(c.RunnerThreads)
 	}
 	if c.SteamKey != "" {
 		c.Env.Backend["STEAM_KEY"] = c.SteamKey
