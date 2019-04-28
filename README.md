@@ -31,9 +31,9 @@ You can use `screeps-launcher cli` in the same folder for CLI access
 ### Other options
 
 There are several extra arguments that can be used to manage the install:
-`screeps-launcer apply` Applies the current config.yml without starting the server.
-`screeps-launcer upgrade` Upgrades all packages (screeps, mods, bots, etc)
-`screeps-launcer cli` Launch a screeps cli
+* `screeps-launcher apply` Applies the current config.yml without starting the server.
+* `screeps-launcher upgrade` Upgrades all packages (screeps, mods, bots, etc)
+* `screeps-launcher cli` Launch a screeps cli
 
 ## Docker
 
