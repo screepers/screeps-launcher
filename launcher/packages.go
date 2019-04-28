@@ -73,7 +73,7 @@ func writeMods(c *Config) error {
 			if err != nil {
 				return err
 			}
-			bots[i] = main
+			bots[i] = filepath.Dir(main)
 		}
 	}
 	var out struct {
