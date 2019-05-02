@@ -9,11 +9,11 @@
       "type": "go",
       "request": "launch",
       "mode": "auto",
-      "program": "${workspaceRoot}\\cmd\\screeps-launcher\\main.go",
+      "program": "${workspaceRoot}/cmd/screeps-launcher/main.go",
       "env": {},
       "args": [],
-      "cwd": "${workspaceRoot}\\test\\",
-      "output": "${workspaceRoot}\\test\\screeps-launcher.exe",
+      "cwd": "${workspaceRoot}/test/",
+      "output": "${workspaceRoot}/test/screeps-launcher",
       // "trace": "verbose"
     }
   ]

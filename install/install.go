@@ -3,17 +3,18 @@ package install
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cavaliercoder/grab"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/cavaliercoder/grab"
 )
+
 // NodeVersion version struct
 type NodeVersion struct {
 	Version string
@@ -65,6 +66,7 @@ Loop:
 func Mongo() error {
 	return nil
 }
+
 // Redis installs local redis (STUB)
 func Redis() error {
 	return nil
@@ -201,34 +203,11 @@ func Yarn() error {
 
 // WindowsBuildTools Installs Windows Build tools (Python, vc++ compiler, etc)
 func WindowsBuildTools() error {
-	cmd := exec.Command(GetNodePath(), GetNpmPath(), "--silent", "--no-audit", "install", "-g", "windows-build-tools")
+	cmd := exec.Command(NodePath, NpmPath, "--silent", "--no-audit", "install", "-g", "windows-build-tools")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	return err
-}
-
-// GetNodePath returns the relative path to node
-func GetNodePath() string {
-	if runtime.GOOS == "windows" {
-		return filepath.Join("deps", "node", "node.exe")
-	}
-	return filepath.Join("deps", "node", "bin", "node")
-}
-// GetNpmPath returns the relative path to npm
-func GetNpmPath() string {
-	if runtime.GOOS == "windows" {
-		return filepath.Join("deps", "node", "npm.cmd")
-	}
-	return filepath.Join("deps", "node", "bin", "npm")
-}
-
-// GetYarnPath returns the relative path to npm
-func GetYarnPath() string {
-	if runtime.GOOS == "windows" {
-		return filepath.Join("deps", "yarn", "bin", "yarn.js")
-	}
-	return filepath.Join("deps", "yarn", "bin", "yarn")
 }
 
 func getFileName(os string, arch string, version string) string {

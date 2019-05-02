@@ -22,3 +22,26 @@ func TestGetFileName(t *testing.T) {
 		}
 	}
 }
+
+func TestGetWantedVersion(t *testing.T) {
+	versions := []NodeVersion{
+		NodeVersion{Lts: "Boron", Version: "lts"},
+		NodeVersion{Lts: "Carbon", Version: "lts"},
+		NodeVersion{Lts: "", Version: "non-lts"},
+	}
+	tables := []struct {
+		ver      string
+		versions []NodeVersion
+		ret      string
+	}{
+		{"Boron", versions, "lts"},
+		{"Carbon", versions, "lts"},
+		{"invalid", versions, ""},
+	}
+	for _, table := range tables {
+		ret := getWantedVersion(table.ver, table.versions)
+		if ret != table.ret {
+			t.Errorf("getFileName(%s, %v) was incorrect, got: %s, want: %s", table.ver, table.versions, ret, table.ret)
+		}
+	}
+}

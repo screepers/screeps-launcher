@@ -2,8 +2,6 @@ package launcher
 
 import (
 	"fmt"
-	"github.com/otiai10/copy"
-	"github.com/screepers/screeps-launcher/v1/install"
 	"log"
 	"os"
 	"os/exec"
@@ -11,11 +9,14 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/otiai10/copy"
+	"github.com/screepers/screeps-launcher/v1/install"
 )
 
 func initServer(c *Config) {
-	copy.Copy(filepath.Join("node_modules","@screeps","launcher","init_dist"), ".")
-	os.RemoveAll(filepath.Join("node_modules",".hooks"))
+	copy.Copy(filepath.Join("node_modules", "@screeps", "launcher", "init_dist"), ".")
+	os.RemoveAll(filepath.Join("node_modules", ".hooks"))
 }
 
 func runServer(c *Config) {
@@ -53,7 +54,7 @@ func runModule(name string, module string, env map[string]string) {
 		log.Printf("[%s] exec: %s", name, module)
 		newPath := filepath.SplitList(os.Getenv("PATH"))
 		cwd, _ := os.Getwd()
-		newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.GetNodePath()))}, newPath...)
+		newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.NodePath))}, newPath...)
 		env["PATH"] = strings.Join(newPath, string(filepath.ListSeparator))
 		lenv := os.Environ()
 		for key, val := range env {

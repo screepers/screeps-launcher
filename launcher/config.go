@@ -1,14 +1,16 @@
 package launcher
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"math"
 	"runtime"
 	"strconv"
+
+	"gopkg.in/yaml.v2"
 )
 
+// ConfigEnv ENV Section of Config
 type ConfigEnv struct {
 	Shared  map[string]string `yaml:"shared" json:"shared"`
 	Backend map[string]string `yaml:"backend" json:"backend"`
@@ -16,6 +18,7 @@ type ConfigEnv struct {
 	Storage map[string]string `yaml:"storage" json:"storage"`
 }
 
+// Config server config structure
 type Config struct {
 	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
 	Env           *ConfigEnv        `yaml:"env" json:"env"`
@@ -28,6 +31,7 @@ type Config struct {
 	LocalMods     string            `yaml:"localMods" json:"localMods"`
 }
 
+// NewConfig Create a new Config
 func NewConfig() *Config {
 	cores := runtime.NumCPU()
 	runners := math.Max(1, float64(cores)-1)
@@ -61,6 +65,7 @@ func NewConfig() *Config {
 	}
 }
 
+// GetConfig loads a config from config.yml
 func (c *Config) GetConfig() (*Config, error) {
 	files := []string{"config.yml", "config.yaml"}
 	for _, file := range files {

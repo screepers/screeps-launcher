@@ -1,19 +1,22 @@
 package launcher
 
 import (
-	"github.com/screepers/screeps-launcher/v1/install"
 	"log"
 	"os"
 	"os/exec"
+
+	"github.com/screepers/screeps-launcher/v1/install"
 	// "path/filepath"
 	// "strings"
 )
 
+// Launcher manages server
 type Launcher struct {
 	config    *Config
 	needsInit bool
 }
 
+// Prepare loads config
 func (l *Launcher) Prepare() {
 	c := NewConfig()
 	_, err := c.GetConfig()
@@ -27,14 +30,16 @@ func (l *Launcher) Prepare() {
 	}
 }
 
+// Upgrade upgrades screeps
 func (l *Launcher) Upgrade() error {
 	os.Remove("yarn.lock")
 	return l.Apply()
 }
 
+// Apply applies config without starting
 func (l *Launcher) Apply() error {
 	var err error
-	if _, err := os.Stat(install.GetNodePath()); os.IsNotExist(err) {
+	if _, err := os.Stat(install.NodePath); os.IsNotExist(err) {
 		log.Print("Installing Node")
 		err = install.Node("Carbon")
 		if err != nil {
@@ -78,6 +83,7 @@ func (l *Launcher) Apply() error {
 	return nil
 }
 
+// Start starts the server
 func (l *Launcher) Start() error {
 	err := l.Apply()
 	if err != nil {
@@ -88,6 +94,7 @@ func (l *Launcher) Start() error {
 	return nil
 }
 
+// Cli Opens a CLI
 func (l *Launcher) Cli() error {
 	log.Print("Starting CLI")
 	runCli(l.config)
@@ -100,10 +107,10 @@ func cmdExists(cmdName string) bool {
 }
 
 func runYarn() error {
-	cmd := exec.Command(install.GetNodePath(), install.GetYarnPath())
+	cmd := exec.Command(install.NodePath, install.YarnPath)
 	//newPath := filepath.SplitList(os.Getenv("PATH"))
 	//cwd, _ := os.Getwd()
-	//nodePath := filepath.Dir(install.GetNodePath())
+	//nodePath := filepath.Dir(install.NodePath)
 	//newPath = append([]string{filepath.Join(cwd, nodePath)}, newPath...)
 	//cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
 	//log.Print(cmd.Env)

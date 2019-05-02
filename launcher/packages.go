@@ -9,7 +9,8 @@ import (
 	"strings"
 )
 
-type PackageJson struct {
+// PackageJSON partial node package.json
+type PackageJSON struct {
 	Name         string            `json:"name"`
 	Main         string            `json:"main"`
 	Dependencies map[string]string `json:"dependencies"`
@@ -38,7 +39,7 @@ func writePackage(c *Config) error {
 			deps[bot] = "*"
 		}
 	}
-	var pack PackageJson
+	var pack PackageJSON
 	pack.Dependencies = deps
 	pack.Private = true
 	pack.Name = "screeps-private-server"
@@ -112,7 +113,7 @@ func getPackageMain(mod string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	var pack PackageJson
+	var pack PackageJSON
 	err = json.Unmarshal(bytes, &pack)
 	if err != nil {
 		return "", err

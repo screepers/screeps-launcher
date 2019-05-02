@@ -1,9 +1,9 @@
 version: 2.1
 
 jobs:
-  build:
+  test:
     docker:
-    - image: circleci/golang:1.11
+    - image: circleci/golang:1.12
     steps:
     - checkout
     - restore_cache:
@@ -11,11 +11,25 @@ jobs:
         - v1-pkg-cache
     - run: go vet -v ./...
     - run: go test -v ./...
-    - run: go install -v ./...
+    - save_cache:
+        key: v1-pkg-cache
+        paths:
+        - "/go/pkg"
+  build:
+    docker:
+    - image: circleci/golang:1.12
+    steps:
+    - checkout
+    - run: go get -u github.com/mitchellh/gox
+    - restore_cache:
+        keys:
+        - v1-pkg-cache
     - run: 
-        name: "Build All"
-        command: |
-          bash build.sh
+        name: "Build (amd64)"
+        command: gox -os="linux darwin windows" -arch="amd64" output="dist/screeps-launcher_${CIRCLE_TAG-${CIRCLE_SHA1:0:6}}_{{.OS}}_{{.Arch}}" cmd/screeps-launcher/
+    - run: 
+        name: "Build (arm,arm64)"
+        command: gox -os="linux" -arch="arm arm64" output="dist/screeps-launcher_${CIRCLE_TAG-${CIRCLE_SHA1:0:6}}_{{.OS}}_{{.Arch}}" cmd/screeps-launcher/
     - save_cache:
         key: v1-pkg-cache
         paths:
@@ -45,7 +59,15 @@ workflows:
   version: 2
   main:
     jobs:
+    - test:
+        filters:
+          branches:
+            only: /.*/
+          tags:
+             only: /.*/
     - build:
+        requires:
+        - test
         filters:
           branches:
             only: /.*/
