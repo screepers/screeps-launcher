@@ -3,18 +3,19 @@ package launcher
 import (
 	"fmt"
 	"github.com/otiai10/copy"
+	"github.com/screepers/screeps-launcher/v1/install"
 	"log"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
 
 func initServer(c *Config) {
-	copy.Copy("node_modules/@screeps/launcher/init_dist/", "./")
-	os.RemoveAll("node_modules/.hooks")
+	copy.Copy(filepath.Join("node_modules","@screeps","launcher","init_dist"), ".")
+	os.RemoveAll(filepath.Join("node_modules",".hooks"))
 }
 
 func runServer(c *Config) {
@@ -38,8 +39,11 @@ func runServer(c *Config) {
 }
 
 func runModule(name string, module string, env map[string]string) {
+	if runtime.GOOS == "windows" {
+		module = module + ".cmd"
+	}
 	os.Mkdir("logs", 0777)
-	n := path.Join("logs", fmt.Sprintf("%s.log", name))
+	n := filepath.Join("logs", fmt.Sprintf("%s.log", name))
 	f, err := os.OpenFile(n, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatalf("Error opening log %s: %v", n, err)
@@ -49,14 +53,14 @@ func runModule(name string, module string, env map[string]string) {
 		log.Printf("[%s] exec: %s", name, module)
 		newPath := filepath.SplitList(os.Getenv("PATH"))
 		cwd, _ := os.Getwd()
-		newPath = append([]string{path.Join(cwd, "deps", "node", "bin")}, newPath...)
+		newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.GetNodePath()))}, newPath...)
 		env["PATH"] = strings.Join(newPath, string(filepath.ListSeparator))
 		lenv := os.Environ()
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
 		fmt.Fprintf(f, "==== %s Starting ====\n", name)
-		cmd := exec.Command(path.Join("deps", "node", "bin", "node"), path.Join("node_modules", ".bin", module))
+		cmd := exec.Command(filepath.Join("node_modules", ".bin", module))
 		cmd.Stdout = f
 		cmd.Stderr = f
 		cmd.Env = lenv

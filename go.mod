@@ -7,7 +7,9 @@ require (
 	github.com/cavaliercoder/grab v2.0.0+incompatible
 	github.com/gorilla/mux v1.7.1
 	github.com/gorilla/websocket v1.4.0
+	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-runewidth v0.0.4 // indirect
+	github.com/mattn/go-tty v0.0.0-20190424173100-523744f04859 // indirect
 	github.com/otiai10/copy v1.0.1
 	github.com/otiai10/curr v0.0.0-20150429015615-9b4961190c95 // indirect
 	github.com/pkg/browser v0.0.0-20180916011732-0a3d74bf9ce4

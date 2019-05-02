@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 )
-
+// NodeVersion version struct
 type NodeVersion struct {
 	Version string
 	Date    string
@@ -61,14 +61,17 @@ Loop:
 	return nil
 }
 
-func InstallMongo() error {
+// Mongo installs local mongo (STUB)
+func Mongo() error {
 	return nil
 }
-func InstallRedis() error {
+// Redis installs local redis (STUB)
+func Redis() error {
 	return nil
 }
 
-func InstallNode(version string) error {
+// Node installs local nodejs
+func Node(version string) error {
 	url := "https://nodejs.org/dist/index.json"
 
 	nodeClient := http.Client{
@@ -113,12 +116,11 @@ func InstallNode(version string) error {
 	download(file, url)
 	log.Print(file)
 
-	f, err := os.OpenFile(file, os.O_RDONLY, 0644)
-	if err != nil {
-		return err
+	if runtime.GOOS == "windows" {
+		extractZip("deps", file)
+	} else {
+		extractTarGz("deps", file)
 	}
-	ExtractTarGz("deps", f)
-	f.Close()
 	os.Remove(file)
 	name := file
 	if runtime.GOOS == "windows" {
@@ -134,9 +136,10 @@ func InstallNode(version string) error {
 	return nil
 }
 
-func InstallYarn() error {
+// Yarn installs YarnJS
+func Yarn() error {
 	type asset struct {
-		Url  string `json:"browser_download_url"`
+		URL  string `json:"browser_download_url"`
 		Name string
 	}
 	type releases struct {
@@ -177,20 +180,15 @@ func InstallYarn() error {
 	for _, asset := range rel.Assets {
 		if strings.HasSuffix(asset.Name, ".tar.gz") {
 			file = asset.Name
-			download(file, asset.Url)
+			download(file, asset.URL)
 			break
 		}
 	}
 
-	f, err := os.OpenFile(file, os.O_RDONLY, 0644)
+	err = extractTarGz("deps", file)
 	if err != nil {
 		return err
 	}
-	err = ExtractTarGz("deps", f)
-	if err != nil {
-		return err
-	}
-	f.Close()
 	os.Remove(file)
 	name := strings.TrimSuffix(file, ".tar.gz")
 	log.Print(name)
@@ -201,12 +199,36 @@ func InstallYarn() error {
 	return nil
 }
 
-func InstallWindowsBuildTools() error {
-	cmd := exec.Command(path.Join("deps", "node", "bin", "node"), path.Join("deps", "node", "bin", "npm"), "--silent", "--no-audit", "install", "-g", "windows-build-tools")
+// WindowsBuildTools Installs Windows Build tools (Python, vc++ compiler, etc)
+func WindowsBuildTools() error {
+	cmd := exec.Command(GetNodePath(), GetNpmPath(), "--silent", "--no-audit", "install", "-g", "windows-build-tools")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	return err
+}
+
+// GetNodePath returns the relative path to node
+func GetNodePath() string {
+	if runtime.GOOS == "windows" {
+		return filepath.Join("deps", "node", "node.exe")
+	}
+	return filepath.Join("deps", "node", "bin", "node")
+}
+// GetNpmPath returns the relative path to npm
+func GetNpmPath() string {
+	if runtime.GOOS == "windows" {
+		return filepath.Join("deps", "node", "npm.cmd")
+	}
+	return filepath.Join("deps", "node", "bin", "npm")
+}
+
+// GetYarnPath returns the relative path to npm
+func GetYarnPath() string {
+	if runtime.GOOS == "windows" {
+		return filepath.Join("deps", "yarn", "bin", "yarn.js")
+	}
+	return filepath.Join("deps", "yarn", "bin", "yarn")
 }
 
 func getFileName(os string, arch string, version string) string {

@@ -5,7 +5,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"runtime"
+	// "path/filepath"
+	// "strings"
 )
 
 type Launcher struct {
@@ -33,23 +34,24 @@ func (l *Launcher) Upgrade() error {
 
 func (l *Launcher) Apply() error {
 	var err error
-	if _, err := os.Stat("deps/node/bin/node"); os.IsNotExist(err) {
+	if _, err := os.Stat(install.GetNodePath()); os.IsNotExist(err) {
 		log.Print("Installing Node")
-		err = install.InstallNode("Carbon")
+		err = install.Node("Carbon")
 		if err != nil {
 			return err
 		}
-		if runtime.GOOS == "windows" {
-			log.Print("Installing windows-build-tools (This may take a while)")
-			err = install.InstallWindowsBuildTools()
-			if err != nil {
-				return err
-			}
-		}
+		// This requires an admin prompt, need to figure out howto prompt the user.
+		// if runtime.GOOS == "windows" {
+		// 	log.Print("Installing windows-build-tools (This may take a while)")
+		// 	err = install.WindowsBuildTools()
+		// 	if err != nil {
+		// 		return err
+		// 	}
+		// }
 	}
 	if _, err := os.Stat("deps/yarn/bin/yarn"); os.IsNotExist(err) {
 		log.Print("Installing Yarn")
-		err = install.InstallYarn()
+		err = install.Yarn()
 		if err != nil {
 			return err
 		}
@@ -95,4 +97,18 @@ func (l *Launcher) Cli() error {
 func cmdExists(cmdName string) bool {
 	_, err := exec.LookPath(cmdName)
 	return err == nil
+}
+
+func runYarn() error {
+	cmd := exec.Command(install.GetNodePath(), install.GetYarnPath())
+	//newPath := filepath.SplitList(os.Getenv("PATH"))
+	//cwd, _ := os.Getwd()
+	//nodePath := filepath.Dir(install.GetNodePath())
+	//newPath = append([]string{filepath.Join(cwd, nodePath)}, newPath...)
+	//cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
+	//log.Print(cmd.Env)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	return err
 }

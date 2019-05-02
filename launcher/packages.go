@@ -5,8 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 )
@@ -89,7 +87,7 @@ func writeMods(c *Config) error {
 		}
 		for _, file := range files {
 			if strings.HasSuffix(file.Name(), ".js") {
-				mods = append(mods, path.Join(c.LocalMods, file.Name()))
+				mods = append(mods, filepath.Join(c.LocalMods, file.Name()))
 			}
 		}
 	}
@@ -110,7 +108,7 @@ func writeMods(c *Config) error {
 }
 
 func getPackageMain(mod string) (string, error) {
-	bytes, err := ioutil.ReadFile(path.Join("node_modules", mod, "package.json"))
+	bytes, err := ioutil.ReadFile(filepath.Join("node_modules", mod, "package.json"))
 	if err != nil {
 		return "", err
 	}
@@ -119,29 +117,5 @@ func getPackageMain(mod string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return path.Join("node_modules", mod, pack.Main), nil
-}
-
-func runYarn() error {
-	cmd := exec.Command(path.Join("deps", "yarn", "bin", "yarn"))
-	newPath := filepath.SplitList(os.Getenv("PATH"))
-	cwd, _ := os.Getwd()
-	newPath = append([]string{path.Join(cwd, "deps", "node", "bin")}, newPath...)
-	cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Run()
-	return err
-}
-
-func runNpm() error {
-	cmd := exec.Command(path.Join("deps", "node", "bin", "node"), path.Join("deps", "node", "bin", "npm"), "--no-audit", "--silent", "install")
-	newPath := filepath.SplitList(os.Getenv("PATH"))
-	cwd, _ := os.Getwd()
-	newPath = append([]string{path.Join(cwd, "deps", "node", "bin")}, newPath...)
-	cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Run()
-	return err
+	return filepath.Join("node_modules", mod, pack.Main), nil
 }
