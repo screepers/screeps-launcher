@@ -1,5 +1,7 @@
 # A better launcher for Screeps private servers
 
+[![CircleCI](https://circleci.com/gh/screepers/screeps-launcher/tree/master.svg?style=shield)](https://circleci.com/gh/screepers/screeps-launcher/tree/master)
+
 ## Why?
 * The steam private server has a few limitations, one being that getting non-workshop mods to work is a huge headache. 
 * The npm version is much better, but requires care in installing everything correctly.
