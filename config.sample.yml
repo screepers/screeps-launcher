@@ -12,7 +12,7 @@ bots:
 extraPackages:
   morgan: "*"
 localMods: ./mods
-serverMod:
+serverConfig:
   welcomeText:  |
     <style>.screepsplus h1{  text-align: center; }</style>
     <div class="screepsplus">

@@ -18,10 +18,16 @@ No need to manually `npm install` anything, its handled automatically
   steamKey: keyFromStep3
   mods: # Recommended mods
   - screepsmod-auth
-  - screepsmod-tickrate
+  - screepsmod-admin-utils
   - screepsmod-mongo  # You must install and start `mongodb` and `redis` before this mod will work
   bots:
     simplebot: screepsbot-zeswarm
+  serverConfig: # This section requires screepsmod-admin-utils to work
+    welcomeText:  |
+      <h1 style="text-align: center;">My Cool Server</h1>
+    constants:
+      TEST_CONSTANT: 123
+    tickRate: 1000
   ```
 5. Open a shell to folder
 6. Run `screeps-launcher`
@@ -37,22 +43,3 @@ There are several extra arguments that can be used to manage the install:
 * `screeps-launcher upgrade` Upgrades all packages (screeps, mods, bots, etc)
 * `screeps-launcher cli` Launch a screeps cli
 
-## Docker
-
-If you don't use Docker, you probably want the regular [usage](#usage) section above
-
-A docker image is also built and published to quay.io
-
-A minimal server can be ran with
-```bash
-docker run -e STEAM_KEY=<key> --name server quay.io/ags131/screeps-launcher
-```
-
-Then just use `docker stop server` and `docker start server` to start and stop it.
-
-You can mount a local folder in to set config.yml or to add local mods
-```bash
-docker run -e STEAM_KEY=<key> -v $PWD/server:/screeps --name server quay.io/ags131/screeps-launcher
-```
-
-You can also bring it up with the included docker-compose.yml
