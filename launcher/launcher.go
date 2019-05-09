@@ -25,8 +25,11 @@ func (l *Launcher) Prepare() {
 	}
 	l.config = c
 	l.needsInit = false
-	if _, err := os.Stat("package.json"); os.IsNotExist(err) {
-		l.needsInit = true
+	checkFiles := []string{"package.json", "assets", "db.json", ".screepsrc", "example-mods"}
+	for _, file := range checkFiles {
+		if _, err := os.Stat(file); os.IsNotExist(err) {
+			l.needsInit = true
+		}
 	}
 }
 
