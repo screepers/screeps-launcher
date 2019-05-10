@@ -43,3 +43,13 @@ There are several extra arguments that can be used to manage the install:
 * `screeps-launcher upgrade` Upgrades all packages (screeps, mods, bots, etc)
 * `screeps-launcher cli` Launch a screeps cli
 
+## Docker
+
+Docker builds are published to Dockerhub as `screepers/screeps-launcher`
+Quickstart:
+1. Create config file in an empty folder (`/srv/screeps` is used for this example)
+2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 screeps-server`
+3. Done! 
+
+There is also an example [docker-compose.yml](docker-compose.yml) that starts a server + mongo
+Don't forget to add `screepsmod-mongo` to your `config.yml` and run `system.resetAllData()` on first use.

@@ -1,15 +1,17 @@
 FROM golang AS builder
-COPY . /go/src/github/ags131/screeps-launcher
-WORKDIR /go/src/github/ags131/screeps-launcher
-RUN go get ./...
+WORKDIR /app
+COPY . .
 RUN CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
-FROM node:8.15
+FROM buildpack-deps:stretch
+RUN groupadd --gid 1000 screeps \
+  && useradd --uid 1000 --gid screeps --shell /bin/bash --create-home screeps \
+  && mkdir /screeps && chown screeps.screeps /screeps
+USER screeps
 VOLUME /screeps
 WORKDIR /screeps
-COPY --from=builder /go/src/github/ags131/screeps-launcher .
-
-ENTRYPOINT ["./screeps-launcher"]
+COPY --from=builder /app/screeps-launcher /usr/bin/
+ENTRYPOINT ["screeps-launcher"]

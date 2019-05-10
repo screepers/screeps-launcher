@@ -44,6 +44,32 @@ jobs:
         root: dist
         paths:
         - '*'
+  build-docker:
+    docker:
+    - image: docker:18.09
+    steps:
+    - setup_remote_docker
+    - checkout
+    - run:
+        name: Build Image
+        command: docker build -t $CIRCLE_PROJECT_REPONAME .
+    - run:
+        name: Tag Image
+        command: |
+          set -x
+          DOCKER_IMAGE=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:$CIRCLE_BRANCH
+          docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:${CIRCLE_SHA1:0:7}
+          if [[ -n "$CIRCLE_TAG" ]]; then
+            docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:$CIRCLE_TAG || true
+            docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:latest || true
+          fi
+    - run:
+        name: Push to Repo
+        command: |
+          DOCKER_IMAGE=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push $DOCKER_IMAGE
   publish-github-release:
     docker:
     - image: cibuilds/github:0.10
@@ -66,6 +92,14 @@ workflows:
           tags:
              only: /.*/
     - build:
+        requires:
+        - test
+        filters:
+          branches:
+            only: /.*/
+          tags:
+             only: /.*/
+    - build-docker:
         requires:
         - test
         filters:

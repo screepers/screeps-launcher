@@ -26,9 +26,14 @@ func runServer(c *Config) {
 			needsStorage = false
 		}
 	}
+	if key := os.Getenv("STEAM_KEY"); key == "" && c.Env.Backend["STEAM_KEY"] == "" {
+		log.Print("STEAM_KEY is not set, either set an environment variable or steamKey in the config.yml")
+		log.Print("Steam key can be obtained from https://steamcommunity.com/dev/apikey")
+		os.Exit(1)
+	}
 	if needsStorage {
 		go runModule("storage", "screeps-storage", c.Env.Storage)
-		time.Sleep(5 * time.Second) // Give storage time to launch
+		time.Sleep(3 * time.Second) // Give storage time to launch
 	}
 	go runModule("runner", "screeps-engine-runner", c.Env.Engine)
 	for i := 0; i < c.Processors; i++ {
