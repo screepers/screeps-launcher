@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/screepers/screeps-launcher/v1/launcher"
 	"log"
 	"os"
+
+	"github.com/screepers/screeps-launcher/v1/launcher"
+	"github.com/screepers/screeps-launcher/v1/version"
 )
 
 func check(err error) {
@@ -20,6 +22,7 @@ func main() {
 	if len(os.Args) > 1 {
 		cmd = os.Args[1]
 	}
+	log.Printf("screeps-launcher %s (%s)", version.BuildVersion, version.BuildTime)
 	switch cmd {
 	case "init":
 		err = l.Apply()
@@ -29,6 +32,7 @@ func main() {
 		err = l.Upgrade()
 	case "cli":
 		err = l.Cli()
+	case "version":
 	default:
 		err = l.Start()
 	}

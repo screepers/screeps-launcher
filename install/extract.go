@@ -4,9 +4,9 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"os"
-	"fmt"
 	"path/filepath"
 	"strings"
 )
@@ -22,9 +22,9 @@ func extractTarGz(dest string, src string) error {
 		return err
 	}
 	defer gzr.Close()
-	
+
 	tr := tar.NewReader(gzr)
-	
+
 	for {
 		header, err := tr.Next()
 		switch {
@@ -75,7 +75,7 @@ func extractZip(dest string, src string) error {
 	defer zipfile.Close()
 	for _, f := range zipfile.File {
 		target := filepath.Join(dest, f.Name)
-		if !strings.HasPrefix(target, filepath.Clean(dest) + string(os.PathSeparator)) {
+		if !strings.HasPrefix(target, filepath.Clean(dest)+string(os.PathSeparator)) {
 			return fmt.Errorf("%s: illegal file path", target)
 		}
 		dir := filepath.Dir(target)
@@ -99,7 +99,7 @@ func extractZip(dest string, src string) error {
 			if err != nil {
 				return err
 			}
-			_, err = io.Copy(w, r);
+			_, err = io.Copy(w, r)
 			w.Close()
 			r.Close()
 			if err != nil {
