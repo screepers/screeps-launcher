@@ -27,13 +27,13 @@ jobs:
     - run: 
         name: "Build (amd64)"
         command: |
-          VER=${CIRCLE_TAG-${CIRCLE_SHA1:0:7}}
-          gox -ldflags="-X 'github.com/screepers/screeps-launcher/version/version.BuildTime=$(date)' -X 'github.com/screepers/screeps-launcher/version/version.BuildVersion=${VER}'" -os="linux darwin windows" -arch="amd64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
+          VER=$(git describe --tags)
+          gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$(date)' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux darwin windows" -arch="amd64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
     - run: 
         name: "Build (arm,arm64)"
         command: |
-          VER=${CIRCLE_TAG-${CIRCLE_SHA1:0:7}}
-          gox -ldflags="-X 'github.com/screepers/screeps-launcher/version/version.BuildTime=$(date)' -X 'github.com/screepers/screeps-launcher/version/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
+          VER=$(git describe --tags)
+          gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$(date)' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
     - save_cache:
         key: v1-pkg-cache
         paths:
