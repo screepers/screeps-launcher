@@ -48,7 +48,7 @@ There are several extra arguments that can be used to manage the install:
 Docker builds are published to Dockerhub as `screepers/screeps-launcher`
 Quickstart:
 1. Create config file in an empty folder (`/srv/screeps` is used for this example)
-2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 screeps-server`
+2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 screepers/screeps-launcher`
 3. Done! 
 
 There is also an example [docker-compose.yml](docker-compose.yml) that starts a server + mongo
