@@ -60,11 +60,11 @@ func runModule(name string, module string, env map[string]string) {
 		newPath := filepath.SplitList(os.Getenv("PATH"))
 		cwd, _ := os.Getwd()
 		newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.NodePath))}, newPath...)
-		env["PATH"] = strings.Join(newPath, string(filepath.ListSeparator))
 		lenv := os.Environ()
 		for key, val := range env {
 			lenv = append(lenv, fmt.Sprintf("%s=%s", key, val))
 		}
+		lenv = append(lenv, fmt.Sprintf("PATH=%s", strings.Join(newPath, string(filepath.ListSeparator))))
 		fmt.Fprintf(f, "==== %s Starting ====\n", name)
 		cmd := exec.Command(filepath.Join("node_modules", ".bin", module))
 		cmd.Stdout = f
