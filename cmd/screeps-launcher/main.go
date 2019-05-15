@@ -15,14 +15,21 @@ func check(err error) {
 }
 
 func main() {
-	var err error
-	l := launcher.Launcher{}
-	l.Prepare()
+	log.Printf("screeps-launcher %s (%s)", version.BuildVersion, version.BuildTime)
+	if ver := version.CheckForUpdate(); ver != "" {
+		log.Printf("A newer version is available. Current: %s, New: %s", ver)
+	}
 	cmd := "start"
 	if len(os.Args) > 1 {
 		cmd = os.Args[1]
 	}
-	log.Printf("screeps-launcher %s (%s)", version.BuildVersion, version.BuildTime)
+	if cmd == "version" {
+		return
+	}
+	var err error
+	l := launcher.Launcher{}
+	l.Prepare()
+
 	switch cmd {
 	case "init":
 		err = l.Apply()
@@ -32,7 +39,6 @@ func main() {
 		err = l.Upgrade()
 	case "cli":
 		err = l.Cli()
-	case "version":
 	default:
 		err = l.Start()
 	}
