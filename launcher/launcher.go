@@ -1,9 +1,12 @@
 package launcher
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/screepers/screeps-launcher/v1/install"
 	// "path/filepath"
@@ -111,12 +114,12 @@ func cmdExists(cmdName string) bool {
 
 func runYarn() error {
 	cmd := exec.Command(install.NodePath, install.YarnPath)
-	//newPath := filepath.SplitList(os.Getenv("PATH"))
-	//cwd, _ := os.Getwd()
-	//nodePath := filepath.Dir(install.NodePath)
-	//newPath = append([]string{filepath.Join(cwd, nodePath)}, newPath...)
-	//cmd.Env = append(cmd.Env, "PATH="+strings.Join(newPath, string(filepath.ListSeparator)))
-	//log.Print(cmd.Env)
+	newPath := filepath.SplitList(os.Getenv("PATH"))
+	cwd, _ := os.Getwd()
+	newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.NodePath))}, newPath...)
+	lenv := os.Environ()
+	lenv = append(lenv, fmt.Sprintf("PATH=%s", strings.Join(newPath, string(filepath.ListSeparator))))
+	cmd.Env = lenv
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
