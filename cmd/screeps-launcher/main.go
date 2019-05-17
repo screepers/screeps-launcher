@@ -17,7 +17,7 @@ func check(err error) {
 func main() {
 	log.Printf("screeps-launcher %s (%s)", version.BuildVersion, version.BuildTime)
 	if ver := version.CheckForUpdate(); ver != "" {
-		log.Printf("A newer version is available. Current: %s, New: %s", ver)
+		log.Printf("A newer version is available")
 	}
 	cmd := "start"
 	if len(os.Args) > 1 {
