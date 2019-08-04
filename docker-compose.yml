@@ -10,14 +10,17 @@ services:
     environment:
       MONGO_HOST: mongo
       REDIS_HOST: redis
+    restart: unless-stopped
   mongo:
     image: mongo
     volumes:
       - mongo-data:/data
+    restart: unless-stopped
   redis:
     image: redis
     volumes:
       - redis-data:/data
+    restart: unless-stopped
 volumes:
   redis-data:
   mongo-data:
