@@ -15,7 +15,7 @@ services:
   mongo:
     image: mongo
     volumes:
-      - mongo-data:/data
+      - mongo-data:/data/db
     restart: unless-stopped
 
   redis:
