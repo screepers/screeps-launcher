@@ -47,7 +47,7 @@ func (l *Launcher) Apply() error {
 	var err error
 	if _, err := os.Stat(install.NodePath); os.IsNotExist(err) {
 		log.Print("Installing Node")
-		err = install.Node("Carbon")
+		err = install.Node(l.config.NodeVersion)
 		if err != nil {
 			return err
 		}

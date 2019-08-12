@@ -25,6 +25,7 @@ type Config struct {
 	Processors    int               `yaml:"processors" json:"processors"`
 	RunnerThreads int               `yaml:"runnerThreads" json:"runnerThreads"`
 	Version       string            `yaml:"version" json:"version"`
+	NodeVersion   string						`yaml:"nodeVersion" json:"nodeVersion"`
 	Mods          []string          `yaml:"mods" json:"mods"`
 	Bots          map[string]string `yaml:"bots" json:"bots"`
 	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
@@ -39,6 +40,7 @@ func NewConfig() *Config {
 		Processors:    cores,
 		RunnerThreads: int(runners),
 		Version:       "latest",
+		NodeVersion:   "Carbon",
 		Env: &ConfigEnv{
 			Shared: map[string]string{
 				"MODFILE":      "mods.json",
