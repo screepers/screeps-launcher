@@ -6,11 +6,22 @@ import (
 	"github.com/screepers/screeps-launcher/v1/cli"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func runCli(config *Config) error {
-	c := cli.NewScreepsCLI("localhost", 21026)
+	host := "localhost"
+	port := 21026
+	if v, ok := config.Env.Backend["CLI_HOST"]; ok {
+		host = v
+	}
+	if v, ok := config.Env.Backend["CLI_PORT"]; ok {
+		if i, err := strconv.Atoi(v); err == nil {
+			port = i
+		}
+	}
+	c := cli.NewScreepsCLI(host, int16(port))
 
 	if err := c.Start(); err != nil {
 		log.Fatalf("Error! %v", err)
