@@ -20,10 +20,10 @@ jobs:
     - image: circleci/golang:1.12
     steps:
     - checkout
-    - run: go install github.com/mitchellh/gox
     - restore_cache:
         keys:
         - v1-pkg-cache
+    - run: go install github.com/mitchellh/gox
     - run: 
         name: "Build (amd64)"
         command: |
