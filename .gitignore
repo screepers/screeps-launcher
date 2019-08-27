@@ -1,4 +1,4 @@
 config.yml
 !.circleci/config.yml
-test
+test*
 dist

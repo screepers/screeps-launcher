@@ -59,6 +59,22 @@ func (l *Launcher) Apply() error {
 		// 		return err
 		// 	}
 		// }
+	} else {
+		cmd := exec.Command(install.NodePath, "--version")
+		ret, err := cmd.Output()
+		if err != nil {
+			return err
+		}
+		curVer := string(ret[:len(ret)-1])
+		if ver, err := install.GetNodeVersion(l.config.NodeVersion); ver != curVer {
+			log.Printf("Node version doesn't match\n Current Version: %s\n Wanted Version: %s\nUpdating...", curVer, ver)
+			os.RemoveAll("deps")
+			os.Remove("yarn.lock")
+			err = install.Node(l.config.NodeVersion)
+			if err != nil {
+				return err
+			}
+		}
 	}
 	if _, err := os.Stat("deps/yarn/bin/yarn"); os.IsNotExist(err) {
 		log.Print("Installing Yarn")

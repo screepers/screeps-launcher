@@ -74,47 +74,14 @@ func Redis() error {
 
 // Node installs local nodejs
 func Node(version string) error {
-	url := "https://nodejs.org/dist/index.json"
-
-	nodeClient := http.Client{
-		Timeout: time.Second * 2, // Maximum of 2 secs
-	}
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	ver, err := GetNodeVersion(version)
 	if err != nil {
 		return err
-	}
-
-	req.Header.Set("User-Agent", "screeps-launcher")
-
-	res, getErr := nodeClient.Do(req)
-	if getErr != nil {
-		return getErr
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		return readErr
-	}
-
-	versions := make([]NodeVersion, 0)
-	err = json.Unmarshal(body, &versions)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	ver := version
-	if version[0:1] != "v" {
-		ver = getWantedVersion(version, versions)
-	}
-	if ver == "" {
-		return fmt.Errorf("Could not find node version: %s", version)
 	}
 
 	file := getFileName(runtime.GOOS, runtime.GOARCH, ver)
 
-	url = fmt.Sprintf("https://nodejs.org/dist/%s/%s", ver, file)
+	url := fmt.Sprintf("https://nodejs.org/dist/%s/%s", ver, file)
 	download(file, url)
 	log.Print(file)
 
@@ -226,6 +193,48 @@ func getFileName(os string, arch string, version string) string {
 		arch = "armv6l"
 	}
 	return fmt.Sprintf("node-%s-%s-%s.%s", version, os, arch, ext)
+}
+
+// GetNodeVersion returns the version for the provided string
+func GetNodeVersion(version string) (string, error) {
+	url := "https://nodejs.org/dist/index.json"
+
+	nodeClient := http.Client{
+		Timeout: time.Second * 2, // Maximum of 2 secs
+	}
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("User-Agent", "screeps-launcher")
+
+	res, getErr := nodeClient.Do(req)
+	if getErr != nil {
+		return "", getErr
+	}
+
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		return "", readErr
+	}
+
+	versions := make([]NodeVersion, 0)
+	err = json.Unmarshal(body, &versions)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	ver := version
+	if version[0:1] != "v" {
+		ver = getWantedVersion(version, versions)
+	}
+	if ver == "" {
+		return "", fmt.Errorf("Could not find node version: %s", version)
+	}
+	return ver, nil
 }
 
 func getWantedVersion(version string, versions []NodeVersion) string {
