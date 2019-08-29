@@ -65,7 +65,7 @@ func (l *Launcher) Apply() error {
 		if err != nil {
 			return err
 		}
-		curVer := string(ret[:len(ret)-1])
+		curVer := strings.TrimRight(string(ret), "\r\n")
 		if ver, err := install.GetNodeVersion(l.config.NodeVersion); ver != curVer {
 			log.Printf("Node version doesn't match\n Current Version: %s\n Wanted Version: %s\nUpdating...", curVer, ver)
 			os.RemoveAll("deps")
