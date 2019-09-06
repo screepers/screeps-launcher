@@ -124,7 +124,7 @@ func (l *Launcher) Start() error {
 		log.Print("Started")
 	}
 	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP)
+	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP, syscall.SIGTERM)
 	for {
 		select {
 		case sig := <-c:
@@ -155,9 +155,11 @@ func (l *Launcher) Start() error {
 				} else {
 					log.Print("Started")
 				}
-			case syscall.SIGINT:
+			case syscall.SIGTERM:
 				fallthrough
-			case syscall.SIGKILL:
+			case os.Interrupt:
+				fallthrough
+			case os.Kill:
 				log.Printf("Stopping")
 				if err := s.Stop(); err != nil {
 					log.Printf("Error while stopping: %v", err)
