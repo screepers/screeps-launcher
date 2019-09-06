@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
+	"path/filepath"
 	"runtime"
 	"strconv"
 
@@ -68,9 +69,12 @@ func NewConfig() *Config {
 }
 
 // GetConfig loads a config from config.yml
-func (c *Config) GetConfig() (*Config, error) {
+func (c *Config) GetConfig(dir string) (*Config, error) {
 	files := []string{"config.yml", "config.yaml"}
 	for _, file := range files {
+		if dir != "" {
+			file = filepath.Join(dir, file)
+		}
 		configFile, err := ioutil.ReadFile(file)
 		if err == nil {
 			err = yaml.Unmarshal(configFile, c)

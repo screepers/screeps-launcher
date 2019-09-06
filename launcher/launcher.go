@@ -5,9 +5,13 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
+	"time"
 
+	"github.com/otiai10/copy"
 	"github.com/screepers/screeps-launcher/v1/install"
 	// "path/filepath"
 	// "strings"
@@ -22,7 +26,7 @@ type Launcher struct {
 // Prepare loads config
 func (l *Launcher) Prepare() {
 	c := NewConfig()
-	_, err := c.GetConfig()
+	_, err := c.GetConfig("")
 	if err != nil {
 		log.Fatalf("Error loading config: %v", err)
 	}
@@ -95,7 +99,8 @@ func (l *Launcher) Apply() error {
 	}
 	if l.needsInit {
 		log.Print("Initializing server")
-		initServer(l.config)
+		copy.Copy(filepath.Join("node_modules", "@screeps", "launcher", "init_dist"), ".")
+		os.RemoveAll(filepath.Join("node_modules", ".hooks"))
 	}
 	log.Print("Writing mods.json")
 	err = writeMods(l.config)
@@ -112,8 +117,57 @@ func (l *Launcher) Start() error {
 		return err
 	}
 	log.Print("Starting Server")
-	runServer(l.config)
-	return nil
+	s := NewServer(l.config)
+	if err := s.Start(); err != nil {
+		log.Printf("Error while starting: %v", err)
+	} else {
+		log.Print("Started")
+	}
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGHUP)
+	for {
+		select {
+		case sig := <-c:
+			switch sig {
+			case syscall.SIGHUP:
+				log.Printf("SIGHUP Received")
+				log.Printf("Applying config")
+				_, err := l.config.GetConfig("")
+				if err != nil {
+					log.Fatalf("Error loading config: %v", err)
+				}
+				select {
+				case <-time.After(2 * time.Second):
+					l.Apply()
+				case <-c:
+					l.Upgrade()
+				}
+				log.Print("Stopping")
+				if err := s.Stop(); err != nil {
+					log.Printf("Error while stopping: %v", err)
+				} else {
+					log.Print("Stopped")
+				}
+				time.Sleep(1 * time.Second)
+				log.Print("Starting")
+				if err := s.Start(); err != nil {
+					log.Printf("Error while starting: %v", err)
+				} else {
+					log.Print("Started")
+				}
+			case syscall.SIGINT:
+				fallthrough
+			case syscall.SIGKILL:
+				log.Printf("Stopping")
+				if err := s.Stop(); err != nil {
+					log.Printf("Error while stopping: %v", err)
+				} else {
+					log.Print("Stopped")
+				}
+				return nil
+			}
+		}
+	}
 }
 
 // Cli Opens a CLI
