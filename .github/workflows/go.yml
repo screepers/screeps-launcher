@@ -32,6 +32,13 @@ jobs:
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
+    - name: Debug
+      run: |
+        pwd
+        echo ${HOME}
+        echo ${GITHUB_WORKSPACE}
+        echo ${GOPATH}
+        echo ${GOROOT}
     - name: Build
       run: |
         go install github.com/mitchellh/gox
@@ -39,12 +46,6 @@ jobs:
         DATE=$(date)
         gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$DATE' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux darwin windows" -arch="amd64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
         gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$DATE' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
-    - name: publish  
-      run: |
-        user=$(echo $GITHUB_REPOSITORY | basename)
-        repo=$(echo $GITHUB_REPOSITORY | dirname)
-        VER=$(git describe --tags)
-        ghr -t ${GITHUB_TOKEN} -u ${user} -r ${repo} -c ${GITHUB_SHA} -delete ${VER} ./dist/
   release:
     name: Release
     runs-on: ubuntu-latest
