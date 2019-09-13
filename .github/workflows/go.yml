@@ -23,6 +23,7 @@ jobs:
       run: go test -v ./...
   build:
     name: Build
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - name: Set up Go 1.13
@@ -41,6 +42,7 @@ jobs:
         $HOME/go/bin/gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$DATE' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
   release:
     name: Release
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Release
