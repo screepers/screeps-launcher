@@ -10,7 +10,7 @@ Therefore, the goal of this is to simplify the entire process making it much eas
 No need to manually `npm install` anything, its handled automatically
 
 ## Usage
-1. Download a release from the [Releases](https://github.com/ags131/screeps-launcher/releases) Page
+1. Download a release from the [Releases](https://github.com/screepers/screeps-launcher/releases) Page
 2. Drop into an empty folder or your PATH
 3. Get your [Steam API key](https://steamcommunity.com/dev/apikey)
 4. Create config.yml (All fields are optional! You can pass STEAM_KEY as an environment variable)
