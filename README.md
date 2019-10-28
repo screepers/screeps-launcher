@@ -9,6 +9,12 @@
 Therefore, the goal of this is to simplify the entire process making it much easier to use. 
 No need to manually `npm install` anything, its handled automatically
 
+## Guides
+If installing on ubuntu 18.04 or on a Pi with raspbian, theres also a guide on
+reddit 
+[here](https://www.reddit.com/r/screeps/comments/deyq66/newbiefriendly_ish_privatededicated_server_setup/)
+that does a step-by-step setup including mongo, redis, and auto start.
+
 ## Usage
 1. Download a release from the [Releases](https://github.com/screepers/screeps-launcher/releases) Page
 2. Drop into an empty folder or your PATH
