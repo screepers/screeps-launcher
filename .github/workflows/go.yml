@@ -40,23 +40,21 @@ jobs:
         DATE=$(date)
         $HOME/go/bin/gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$DATE' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux darwin windows" -arch="amd64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
         $HOME/go/bin/gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$DATE' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
+    - name: Publish Release
+      uses: fnkr/github-action-ghr@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GHR_PATH: dist/
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/upload-artifact@master
       with:
         name: binaries
         path: dist
-  release:
-    name: Release
-    needs: ['build']
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: binaries
-          path: dist/
-      - name: Release
-        uses: fnkr/github-action-ghr@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GHR_PATH: dist/
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
-      
+  # docker:
+  #   name: Docker
+  #   needs: ['test']
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: Build the Docker image
+  #     run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
