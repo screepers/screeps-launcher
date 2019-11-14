@@ -1,6 +1,6 @@
 steamKey: <YourSteamKey>
 env:
-  common:
+  shared:
     MONGO_HOST: localhost
     REDIS_HOST: localhost
 version: latest
