@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/screepers/screeps-launcher/v1/launcher"
+	"github.com/screepers/screeps-launcher/v1/recovery"
 	"github.com/screepers/screeps-launcher/v1/version"
 )
 
@@ -29,6 +30,7 @@ func main() {
 	var err error
 	l := launcher.Launcher{}
 	l.Prepare()
+	r := recovery.New()
 
 	switch cmd {
 	case "init":
@@ -39,6 +41,10 @@ func main() {
 		err = l.Upgrade()
 	case "cli":
 		err = l.Cli()
+	case "backup":
+		err = r.Backup()
+	case "restore":
+		err = r.Restore()
 	default:
 		err = l.Start()
 	}

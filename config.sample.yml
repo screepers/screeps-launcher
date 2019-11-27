@@ -9,9 +9,16 @@ mods:
 - screepsmod-auth
 bots:
   simplebot: "screepsbot-zeswarm"
+  overmind: "./bots/overmind/dist/main.js"
 extraPackages:
   morgan: "*"
 localMods: ./mods
+backup:
+  dirs:
+  - tests
+  - bots/overmind
+  files:
+  - .screepsrc # You probably don't need this, jsut an example
 serverConfig:
   welcomeText:  |
     <style>.screepsplus h1{  text-align: center; }</style>

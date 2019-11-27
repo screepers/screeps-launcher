@@ -48,6 +48,8 @@ There are several extra arguments that can be used to manage the install:
 * `screeps-launcher apply` Applies the current config.yml without starting the server.
 * `screeps-launcher upgrade` Upgrades all packages (screeps, mods, bots, etc)
 * `screeps-launcher cli` Launch a screeps cli
+* `screeps-launcher backup <file>` Creates a backup
+* `screeps-launcher restore <file>` Restores a backup (Warning: Completely replaces existing data)
 
 ## docker-compose
 There is also an example [docker-compose.yml](docker-compose.yml) that starts a server + mongo.

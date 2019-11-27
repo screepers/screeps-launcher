@@ -19,6 +19,11 @@ type ConfigEnv struct {
 	Storage map[string]string `yaml:"storage" json:"storage"`
 }
 
+type ConfigBackup struct {
+	Dirs  []string `yaml:"dirs" json:"dirs"`
+	Files []string `yaml:"files" json:"files"`
+}
+
 // Config server config structure
 type Config struct {
 	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
@@ -31,6 +36,7 @@ type Config struct {
 	Bots          map[string]string `yaml:"bots" json:"bots"`
 	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
 	LocalMods     string            `yaml:"localMods" json:"localMods"`
+	Backup        *ConfigBackup     `yaml:"backup" json:"backup"`
 }
 
 // NewConfig Create a new Config
@@ -65,6 +71,10 @@ func NewConfig() *Config {
 		Mods:          make([]string, 0),
 		Bots:          make(map[string]string),
 		ExtraPackages: make(map[string]string),
+		Backup: &ConfigBackup{
+			Dirs:  make([]string, 0),
+			Files: make([]string, 0),
+		},
 	}
 }
 
@@ -95,6 +105,12 @@ func (c *Config) GetConfig(dir string) (*Config, error) {
 	}
 	if c.SteamKey != "" {
 		c.Env.Backend["STEAM_KEY"] = c.SteamKey
+	}
+	if c.Backup.Dirs == nil {
+		c.Backup.Dirs = make([]string, 0)
+	}
+	if c.Backup.Files == nil {
+		c.Backup.Files = make([]string, 0)
 	}
 	return c, nil
 }
