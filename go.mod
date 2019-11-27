@@ -6,6 +6,7 @@ require (
 	github.com/c-bata/go-prompt v0.2.3
 	github.com/cavaliercoder/grab v2.0.0+incompatible
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
+	github.com/go-resty/resty/v2 v2.1.0
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
@@ -24,6 +25,5 @@ require (
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.1.3
-	golang.org/x/net v0.0.0-20190514140710-3ec191127204 // indirect
 	gopkg.in/yaml.v2 v2.2.2
 )

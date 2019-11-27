@@ -1,71 +1,32 @@
 package cli
 
 import (
-	"bufio"
+	"context"
 	"fmt"
-	"io"
-	"log"
-	"net"
-	"strings"
 	"time"
+
+	"github.com/go-resty/resty/v2"
 )
 
-func copyWorker(dst io.Writer, src io.Reader, doneCh chan<- bool) {
-	io.Copy(dst, src)
-	doneCh <- true
-}
-
 type ScreepsCLI struct {
-	conn        net.Conn
-	buffer      []string
-	host        string
-	port        int16
-	readCh      chan string
-	stopReadCh  chan bool
+	client      *resty.Client
 	WelcomeText string
 }
 
 func NewScreepsCLI(host string, port int16) *ScreepsCLI {
-	return &ScreepsCLI{
-		host: host,
-		port: port,
+	client := resty.New()
+	client.SetHostURL(fmt.Sprintf("http://%s:%d", host, port))
+	s := &ScreepsCLI{
+		client: client,
 	}
+	resp, err := client.R().Get("/greeting")
+	if err == nil {
+		s.WelcomeText = resp.String()
+	}
+	return s
 }
 
 func (s *ScreepsCLI) Start() error {
-	conn, err := net.Dial("tcp4", fmt.Sprintf("%s:%d", s.host, s.port))
-	if err != nil {
-		log.Println("dial:", err)
-		return err
-	}
-	s.conn = conn
-	s.readCh = make(chan string)
-	s.stopReadCh = make(chan bool)
-
-	go func(outCh chan<- string) {
-		reader := bufio.NewReader(s.conn)
-		for {
-			line, err := reader.ReadString('\n')
-			if err != nil {
-				break
-			}
-			if len(line) > 0 {
-				line = strings.TrimPrefix(line, "< ")
-				outCh <- line
-			}
-		}
-	}(s.readCh)
-	buffer := ""
-loop:
-	for {
-		select {
-		case line := <-s.readCh:
-			buffer = buffer + line
-		case <-time.After(200 * time.Millisecond):
-			break loop
-		}
-	}
-	s.WelcomeText = buffer
 	return nil
 }
 
@@ -74,26 +35,17 @@ func (s *ScreepsCLI) Stop() {
 }
 
 func (s *ScreepsCLI) Command(cmd string) string {
-	if len(cmd) > 0 {
-		s.conn.Write([]byte(fmt.Sprintf("%s\n", cmd)))
+	if len(cmd) == 0 {
+		return ""
 	}
-	buffer := make([]string, 0)
-	log.Println("first sel")
-	select {
-	case line := <-s.readCh:
-		buffer = append(buffer, line)
-	case <-time.After(5 * time.Second):
-		buffer = append(buffer, "Timeout Waiting for response")
-		return strings.Join(buffer, "")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	resp, err := s.client.R().
+		SetContext(ctx).
+		SetBody(cmd).
+		Post("/cli")
+	if err != nil {
+		return err.Error()
 	}
-loop:
-	for {
-		select {
-		case line := <-s.readCh:
-			buffer = append(buffer, line)
-		case <-time.After(200 * time.Millisecond):
-			break loop
-		}
-	}
-	return strings.Join(buffer, "")
+	return resp.String()
 }

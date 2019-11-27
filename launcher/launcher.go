@@ -2,6 +2,7 @@ package launcher
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -102,6 +103,7 @@ func (l *Launcher) Apply() error {
 		copy.Copy(filepath.Join("node_modules", "@screeps", "launcher", "init_dist"), ".")
 		os.RemoveAll(filepath.Join("node_modules", ".hooks"))
 	}
+	ioutil.WriteFile(filepath.Join(l.config.LocalMods, "screeps-launcher-cli.js"), []byte(cliMod), 0644)
 	log.Print("Writing mods.json")
 	err = writeMods(l.config)
 	if err != nil {

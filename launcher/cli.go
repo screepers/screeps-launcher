@@ -26,14 +26,16 @@ func runCli(config *Config) error {
 	if err := c.Start(); err != nil {
 		log.Fatalf("Error! %v", err)
 	}
-	fmt.Print(c.WelcomeText)
+	fmt.Println(c.WelcomeText)
 	p := prompt.New(
 		func(cmd string) {
 			if cmd == "exit" || cmd == "quit" {
 				os.Exit(0)
 			}
 			ret := c.Command(cmd)
-			fmt.Print(ret)
+			if len(ret) > 0 {
+				fmt.Println(ret)
+			}
 		},
 		completer,
 		prompt.OptionTitle("Screeps CLI"),

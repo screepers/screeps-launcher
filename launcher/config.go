@@ -19,6 +19,7 @@ type ConfigEnv struct {
 	Storage map[string]string `yaml:"storage" json:"storage"`
 }
 
+// ConfigBackup Backup section of config
 type ConfigBackup struct {
 	Dirs  []string `yaml:"dirs" json:"dirs"`
 	Files []string `yaml:"files" json:"files"`
