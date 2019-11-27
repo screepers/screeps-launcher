@@ -40,9 +40,9 @@ func (r *Recovery) redisBackup() (redisData, error) {
 	}
 	col := redisData{}
 	for _, key := range keys {
-		value, err := client.Dump(key).Result()
+		value, _ := client.Dump(key).Result()
 		if err != nil {
-			return nil, errors.Wrapf(err, "failed to dump key %s", key)
+			continue
 		}
 		ttl := client.TTL(key).Val()
 		col[key] = redisValue{
