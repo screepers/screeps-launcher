@@ -93,7 +93,7 @@ func (r *Recovery) mongoRestore(data mongoData) error {
 		}
 		_, err := db.Collection(name).InsertMany(ctx, data)
 		if err != nil {
-			return errors.Wrapf(err, "failed to insert into collection %s", name)
+			continue
 		}
 	}
 	return nil
