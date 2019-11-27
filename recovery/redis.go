@@ -2,6 +2,7 @@ package recovery
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/go-redis/redis/v7"
@@ -22,6 +23,12 @@ func (r *Recovery) getRedisClient() *redis.Client {
 		host = v
 	}
 	if v, ok := r.config.Env.Shared["REDIS_PORT"]; ok {
+		port = v
+	}
+	if v, ok := os.LookupEnv("REDIS_HOST"); ok {
+		host = v
+	}
+	if v, ok := os.LookupEnv("REDIS_PORT"); ok {
 		port = v
 	}
 	client := redis.NewClient(&redis.Options{

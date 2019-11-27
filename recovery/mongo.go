@@ -3,6 +3,7 @@ package recovery
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/pkg/errors"
@@ -24,6 +25,15 @@ func (r *Recovery) getMongoClient(ctx context.Context) (*mongo.Client, *mongo.Da
 		port = v
 	}
 	if v, ok := r.config.Env.Shared["MONGO_DATABASE"]; ok {
+		database = v
+	}
+	if v, ok := os.LookupEnv("MONGO_HOST"); ok {
+		host = v
+	}
+	if v, ok := os.LookupEnv("MONGO_PORT"); ok {
+		port = v
+	}
+	if v, ok := os.LookupEnv("MONGO_DATABASE"); ok {
 		database = v
 	}
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s", host, port)))
