@@ -1,10 +1,12 @@
 package recovery
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
 
-import "path/filepath"
-
-import "os"
+	"github.com/pkg/errors"
+)
 
 type fileData map[string][]byte
 
@@ -43,10 +45,13 @@ func (r *Recovery) filesRestore(data fileData) error {
 		dir := filepath.Dir(file)
 		if dir != "" {
 			if err := os.MkdirAll(dir, 0755); err != nil {
-				return err
+				return errors.Wrapf(err, "failed to mkdir %s", dir)
 			}
 		}
-		ioutil.WriteFile(file, bytes, 0644)
+		err := ioutil.WriteFile(file, bytes, 0644)
+		if err != nil {
+			return errors.Wrapf(err, "failed to write file %s", file)
+		}
 	}
 	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
+	"github.com/pkg/errors"
 )
 
 type redisData map[string]redisValue
@@ -35,13 +36,13 @@ func (r *Recovery) redisBackup() (redisData, error) {
 	client := r.getRedisClient()
 	keys, err := client.Keys("*").Result()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "failed to get keys")
 	}
 	col := redisData{}
 	for _, key := range keys {
 		value, err := client.Dump(key).Result()
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrapf(err, "failed to dump key %s", key)
 		}
 		ttl := client.TTL(key).Val()
 		col[key] = redisValue{
@@ -55,11 +56,11 @@ func (r *Recovery) redisBackup() (redisData, error) {
 func (r *Recovery) redisRestore(data redisData) error {
 	client := r.getRedisClient()
 	if err := client.FlushAll().Err(); err != nil {
-		return err
+		return errors.Wrap(err, "failed to flush")
 	}
 	for k, v := range data {
 		if err := client.RestoreReplace(k, v.TTL, v.Value).Err(); err != nil {
-			return err
+			return errors.Wrapf(err, "failed to restore key %s", k)
 		}
 	}
 	return nil
