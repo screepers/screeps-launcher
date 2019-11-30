@@ -103,7 +103,13 @@ func (l *Launcher) Apply() error {
 		copy.Copy(filepath.Join("node_modules", "@screeps", "launcher", "init_dist"), ".")
 		os.RemoveAll(filepath.Join("node_modules", ".hooks"))
 	}
-	ioutil.WriteFile(filepath.Join(l.config.LocalMods, "screeps-launcher-cli.js"), []byte(cliMod), 0644)
+
+	os.MkdirAll(l.config.LocalMods, 0755)
+	cliModPath := filepath.Join(l.config.LocalMods, "screeps-launcher-cli.js")
+	err = ioutil.WriteFile(cliModPath, []byte(cliMod), 0644)
+	if err != nil {
+		log.Printf("WARNING: failed to write %s, CLI may not function correctly. Error was: %v", cliModPath, err)
+	}
 	log.Print("Writing mods.json")
 	err = writeMods(l.config)
 	if err != nil {

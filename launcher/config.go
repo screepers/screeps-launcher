@@ -69,6 +69,7 @@ func NewConfig() *Config {
 				"DB_PATH": "db.json",
 			},
 		},
+		LocalMods:     "mods",
 		Mods:          make([]string, 0),
 		Bots:          make(map[string]string),
 		ExtraPackages: make(map[string]string),

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -81,7 +80,6 @@ func writeMods(c *Config) error {
 	}
 
 	if c.LocalMods != "" {
-		os.MkdirAll(c.LocalMods, 0777)
 		files, err := ioutil.ReadDir(c.LocalMods)
 		if err != nil {
 			return err
