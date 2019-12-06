@@ -81,7 +81,7 @@ func (l *Launcher) Apply() error {
 			}
 		}
 	}
-	if _, err := os.Stat("deps/yarn/bin/yarn"); os.IsNotExist(err) {
+	if _, err := os.Stat(install.YarnPath); os.IsNotExist(err) {
 		log.Print("Installing Yarn")
 		err = install.Yarn()
 		if err != nil {
