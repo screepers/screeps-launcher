@@ -23,7 +23,7 @@ module.exports = config => {
 			res.write(text)
 			res.end()
 		})
-		app.post('/cli', bodyParser.text(), async (req, res) => {
+		app.post('/cli', bodyParser.text({ type: req => true }), async (req, res) => {
 			const cb = (data, isResult) => {
 				res.write(data + "\n")
 				if (isResult) {
