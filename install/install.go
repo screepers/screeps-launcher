@@ -114,7 +114,6 @@ func Yarn() error {
 	type releases struct {
 		Assets []asset
 	}
-	
 
 	url := "https://api.github.com/repos/yarnpkg/yarn/releases"
 
@@ -147,17 +146,17 @@ func Yarn() error {
 	}
 
 	var file string
-	Loop:
-		for _, release := range rel {
-			for _, asset := range release.Assets {
-				if strings.HasSuffix(asset.Name, ".tar.gz") {
-					file = asset.Name
-					log.Print(file)
-					download(file, asset.URL)
-					break Loop
-				}
+Loop:
+	for _, release := range rel {
+		for _, asset := range release.Assets {
+			if strings.HasSuffix(asset.Name, ".tar.gz") {
+				file = asset.Name
+				log.Print(file)
+				download(file, asset.URL)
+				break Loop
 			}
 		}
+	}
 
 	err = extractTarGz("deps", file)
 	if err != nil {
