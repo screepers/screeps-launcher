@@ -115,7 +115,7 @@ func Yarn() error {
 		Assets []asset
 	}
 
-	url := "https://api.github.com/repos/yarnpkg/yarn/releases/latest"
+	url := "https://api.github.com/repos/yarnpkg/yarn/releases"
 
 	yarnClient := http.Client{
 		Timeout: time.Second * 2, // Maximum of 2 secs
@@ -138,7 +138,7 @@ func Yarn() error {
 		return readErr
 	}
 
-	rel := releases{}
+	rel := []releases{}
 	err = json.Unmarshal(body, &rel)
 	if err != nil {
 		fmt.Println(err)
@@ -146,11 +146,15 @@ func Yarn() error {
 	}
 
 	var file string
-	for _, asset := range rel.Assets {
-		if strings.HasSuffix(asset.Name, ".tar.gz") {
-			file = asset.Name
-			download(file, asset.URL)
-			break
+Loop:
+	for _, release := range rel {
+		for _, asset := range release.Assets {
+			if strings.HasSuffix(asset.Name, ".tar.gz") {
+				file = asset.Name
+				log.Print(file)
+				download(file, asset.URL)
+				break Loop
+			}
 		}
 	}
 
