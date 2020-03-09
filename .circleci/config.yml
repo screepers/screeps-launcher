@@ -63,7 +63,7 @@ jobs:
           set -x
           DOCKER_IMAGE=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
           docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:${CIRCLE_SHA1:0:7}
-          if [[ -n "$CIRCLE_BRANCH" ]]; then
+          if [[ -n "$CIRCLE_BRANCH" ]] && [[ "$CIRCLE_BRANCH" != "pull/"* ]]; then
             docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_IMAGE:$CIRCLE_BRANCH
           fi
           if [[ -n "$CIRCLE_TAG" ]]; then
