@@ -34,8 +34,8 @@ services:
     image: grafana/grafana
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./stats/grafana.ini:/etc/grafana/grafana.ini
-      - ./stats/grafana.prov.yaml:/etc/grafana/provisioning/default.yaml
+      - ./examples/stats/grafana.ini:/etc/grafana/grafana.ini
+      - ./examples/stats/grafana.prov.yaml:/etc/grafana/provisioning/default.yaml
     ports:
       - "3000:3000"
     restart: unless-stopped      
@@ -49,9 +49,9 @@ services:
     restart: unless-stopped
     
   setup-stats-agent:
-    build: stats/.
+    build: examples/stats/.
     volumes:
-      - ./stats/setup.json:/setup.json
+      - ./examples/stats/setup.json:/setup.json
     restart: "no"
 
 volumes:
