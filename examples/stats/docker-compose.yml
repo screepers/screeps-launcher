@@ -35,7 +35,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./examples/stats/grafana.ini:/etc/grafana/grafana.ini
-      - ./examples/stats/grafana.prov.yaml:/etc/grafana/provisioning/default.yaml
+      - ./examples/stats/grafana.prov.yaml:/etc/grafana/provisioning/datasources/default.yaml
     ports:
       - "3000:3000"
     restart: unless-stopped      
