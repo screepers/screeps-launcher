@@ -49,13 +49,9 @@ services:
     restart: unless-stopped
     
   setup-stats-agent:
-    image: appropriate/curl
-    depends_on:
-      - stats-agent
+    build: stats/.
     volumes:
       - ./stats/setup.json:/setup.json
-    command: |
-      curl 'http://stats-agent:3000/agent' -X POST -H 'Content-Type: application/json;charset=UTF-8' -H 'token-claim-user: privateserver' --data @/setup.json 
     restart: "no"
 
 volumes:
