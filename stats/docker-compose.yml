@@ -41,7 +41,7 @@ services:
     restart: unless-stopped      
     
   stats-agent:
-    image: my-hosted-agent 
+    image: ags131/hosted-agent 
     environment:
       GRAPHITE_HOST: 'graphite'
     volumes:
