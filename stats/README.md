@@ -7,6 +7,6 @@ To setup and use a local Grafana via docker-compose, follow these steps:
 
 Make sure that you export your Dashboard before delete the private server containers.
 
-Submitted by MaggNorway [https://github.com/MaggNorway].
+Submitted by MaggNorway / Vipo [https://github.com/MaggNorway].
 
 The `wait-for-it.sh` script is from [https://github.com/vishnubob/wait-for-it].
