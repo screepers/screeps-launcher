@@ -1,0 +1,67 @@
+version: '3'
+services:
+  screeps:
+    image: screepers/screeps-launcher
+    volumes:
+      - ./config.yml:/screeps/config.yml
+      - screeps-data:/screeps
+    ports:
+      - 21025:21025/tcp
+    environment:
+      MONGO_HOST: mongo
+      REDIS_HOST: redis
+    restart: unless-stopped
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    
+  graphite:
+    image: graphiteapp/graphite-statsd
+    volumes:
+      - graphite_data:/opt/graphite/storage/whisper
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./stats/grafana.ini:/etc/grafana/grafana.ini
+      - ./stats/grafana.prov.yaml:/etc/grafana/provisioning/default.yaml
+    ports:
+      - "3000:3000"
+    restart: unless-stopped      
+    
+  stats-agent:
+    image: my-hosted-agent 
+    environment:
+      GRAPHITE_HOST: 'graphite'
+    volumes:
+      - stats-agent:/app
+    restart: unless-stopped
+    
+  setup-stats-agent:
+    image: appropriate/curl
+    depends_on:
+      - stats-agent
+    volumes:
+      - ./stats/setup.json:/setup.json
+    command: |
+      curl 'http://stats-agent:3000/agent' -X POST -H 'Content-Type: application/json;charset=UTF-8' -H 'token-claim-user: privateserver' --data @/setup.json 
+    restart: "no"
+
+volumes:
+  redis-data:
+  mongo-data:
+  screeps-data:
+  graphite_data:
+  grafana_data:
+  stats-agent:

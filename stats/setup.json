@@ -1,0 +1,17 @@
+{
+  "method": "memory",
+  "methodConfig": {
+    "segment": 98,
+    "interval": 15
+  },
+  "screepsAPIConfig" : {
+    "privateServer": true,
+    "username": "YOUR_PRIVATE_SERVER_USERNAME",
+    "password": "YOUR_PRIVATE_SERVER_PASSWORD",
+    "hostname": "screeps",
+    "protocol": "http",
+    "port": 21025,
+    "path": "/"
+  }
+}
+  

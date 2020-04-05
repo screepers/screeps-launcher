@@ -1,0 +1,6 @@
+datasources:
+  - name: Graphite
+    type: graphite
+    access: direct
+    url: http://graphite
+    isDefault: true
