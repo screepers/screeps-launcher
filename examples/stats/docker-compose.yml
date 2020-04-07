@@ -1,0 +1,63 @@
+version: '3'
+services:
+  screeps:
+    image: screepers/screeps-launcher
+    volumes:
+      - ./config.yml:/screeps/config.yml
+      - screeps-data:/screeps
+    ports:
+      - 21025:21025/tcp
+    environment:
+      MONGO_HOST: mongo
+      REDIS_HOST: redis
+    restart: unless-stopped
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    
+  graphite:
+    image: graphiteapp/graphite-statsd
+    volumes:
+      - graphite_data:/opt/graphite/storage/whisper
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./examples/stats/grafana.ini:/etc/grafana/grafana.ini
+      - ./examples/stats/grafana.prov.yaml:/etc/grafana/provisioning/datasources/default.yaml
+    ports:
+      - "3000:3000"
+    restart: unless-stopped      
+    
+  stats-agent:
+    image: ags131/hosted-agent 
+    environment:
+      GRAPHITE_HOST: 'graphite'
+    volumes:
+      - stats-agent:/app
+    restart: unless-stopped
+    
+  setup-stats-agent:
+    build: examples/stats/.
+    volumes:
+      - ./examples/stats/setup.json:/setup.json
+    restart: "no"
+
+volumes:
+  redis-data:
+  mongo-data:
+  screeps-data:
+  graphite_data:
+  grafana_data:
+  stats-agent:
