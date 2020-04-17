@@ -2,12 +2,13 @@ package launcher
 
 import (
 	"fmt"
-	prompt "github.com/c-bata/go-prompt"
-	"github.com/screepers/screeps-launcher/v1/cli"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+
+	prompt "github.com/c-bata/go-prompt"
+	"github.com/screepers/screeps-launcher/v1/cli"
 )
 
 func runCli(config *Config) error {
@@ -87,12 +88,18 @@ func completer(d prompt.Document) []prompt.Suggest {
 			{Text: "reload(botAiName)", Description: "Reload scripts for the specified bot AI."},
 			{Text: "removeUser(username)", Description: "Delete the specified bot player and all its game objects."},
 		},
+		"strongholds": []prompt.Suggest{
+			{Text: "spawn(roomName, [opts])", Description: "Create a new NPC Stronghold, and spawn it to the specified room."},
+			{Text: "expand(roomName)", Description: "Force an NPC Stronghold to spawn a new lesser Invader Core in a nearby room."},
+		},
 		"system": []prompt.Suggest{
 			{Text: "resetAllData()", Description: "Wipe all world data and reset the database to the default state."},
 			{Text: "sendServerMessage(message)", Description: "Send a text server message to all currently connected players."},
 			{Text: "pauseSimulation()", Description: "Stop main simulation loop execution."},
 			{Text: "resumeSimulation()", Description: "Resume main simulation loop execution."},
 			{Text: "runCronjob(jobName)", Description: "Run a cron job immediately."},
+			{Text: "getTickDuration()", Description: "Show current minimal tick duration (in milliseconds)."},
+			{Text: "setTickDuration(minimalDuration)", Description: "Set current minimal tick duration (in milliseconds)."},
 		},
 	}
 	if part, ok := completions[prefix]; ok {
