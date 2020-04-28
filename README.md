@@ -57,7 +57,7 @@ This is the easiest way to get a private server working on windows and using mon
 
 1. Install [docker](https://docs.docker.com/install/) (look on the left to find the correct platform).
 2. You might have to fiddle with the docker advanced settings to allow enough CPU to run the server smoothly.
-3. Create an empty folder with both a `config.yml` (don't forget to add `screepsmod-mongo`!) and a `docker-compose.yml` (see examples). The `docker-compose.yml` example can be used as-is, but the `config.yml` requires some customization.
+3. Create an empty folder with both a `config.yml` (don't forget to add `screepsmod-mongo`!) and a `docker-compose.yml` (see examples). The `docker-compose.yml` example can be used as-is, but the `config.yml` requires some customization. Remove environments (line 2-5) in `config.yml`, since they are defined in docker-compose.yml.
 4. Open a terminal in that folder. Run `docker-compose up` to start the services. Wait until it is done starting the docker images and settle on mongo status messages.
 5. Open another terminal in that folder. Run `docker-compose exec screeps screeps-launcher cli`. This is a command-line interface to control your new private server.
 6. In the CLI, run `system.resetAllData()` to initialize the database. Unless you want to poke around, use `Ctrl-d` to exit the cli.
