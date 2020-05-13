@@ -89,3 +89,8 @@ A few mods of interests:
 - `screepsmod-market`
 
 See each of their documentation on the [ScreepsMods github repository](https://github.com/ScreepsMods).
+
+
+## Bots
+You can add bots to spawn in by adding either their names or path to the code on your file system in the `config.yml` file.  See config.sample.yml for an example.
+
