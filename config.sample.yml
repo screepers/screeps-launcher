@@ -9,7 +9,7 @@ mods:
 - screepsmod-auth
 bots:
   simplebot: "screepsbot-zeswarm"
-  overmind: "./bots/overmind/dist/main.js"
+  overmind: "./bots/overmind/dist" # On windows path needs to be .\\bots\\overmind\\dist
 extraPackages:
   morgan: "*"
 localMods: ./mods
