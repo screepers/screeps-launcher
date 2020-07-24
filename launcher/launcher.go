@@ -75,12 +75,14 @@ func (l *Launcher) Apply() error {
 			if err != nil {
 				log.Printf("Could not get node version: %s", err.Error())
 			}
-			log.Printf("Node version doesn't match\n Current Version: %s\n Wanted Version: %s\nUpdating...", curVer, ver)
-			os.RemoveAll("deps")
-			os.Remove("yarn.lock")
-			err = install.Node(l.config.NodeVersion)
-			if err != nil {
-				return err
+			if ver != "" {
+				log.Printf("Node version doesn't match\n Current Version: %s\n Wanted Version: %s\nUpdating...", curVer, ver)
+				os.RemoveAll("deps")
+				os.Remove("yarn.lock")
+				err = install.Node(l.config.NodeVersion)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
