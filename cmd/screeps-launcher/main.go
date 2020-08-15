@@ -1,8 +1,8 @@
 package main
 
 import (
+	"flag"
 	"log"
-	"os"
 
 	"github.com/screepers/screeps-launcher/v1/launcher"
 	"github.com/screepers/screeps-launcher/v1/recovery"
@@ -16,13 +16,14 @@ func check(err error) {
 }
 
 func main() {
+	flag.Parse()
 	log.Printf("screeps-launcher %s (%s)", version.BuildVersion, version.BuildTime)
 	if ver := version.CheckForUpdate(); ver != "" {
 		log.Printf("A newer version is available")
 	}
 	cmd := "start"
-	if len(os.Args) > 1 {
-		cmd = os.Args[1]
+	if arg := flag.Arg(0); arg != "" {
+		cmd = arg
 	}
 	if cmd == "version" {
 		return

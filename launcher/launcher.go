@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -18,6 +19,8 @@ import (
 	// "strings"
 )
 
+var moduleArg = flag.String("modules", "", "Comma seperate list of modules to run")
+
 // Launcher manages server
 type Launcher struct {
 	config    *Config
@@ -30,6 +33,14 @@ func (l *Launcher) Prepare() {
 	_, err := c.GetConfig("")
 	if err != nil {
 		log.Fatalf("Error loading config: %v", err)
+	}
+	if len(*moduleArg) > 0 {
+		log.Printf("Modules: %s", *moduleArg)
+		modules := strings.Split(*moduleArg, ",")
+		c.Modules = make(map[string]bool)
+		for _, module := range modules {
+			c.Modules[module] = true
+		}
 	}
 	l.config = c
 	l.needsInit = false

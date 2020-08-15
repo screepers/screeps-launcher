@@ -38,6 +38,7 @@ type Config struct {
 	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
 	LocalMods     string            `yaml:"localMods" json:"localMods"`
 	Backup        *ConfigBackup     `yaml:"backup" json:"backup"`
+	Modules				map[string]bool		`yaml:"modules" json:"modules"`
 }
 
 // NewConfig Create a new Config
@@ -76,6 +77,13 @@ func NewConfig() *Config {
 		Backup: &ConfigBackup{
 			Dirs:  make([]string, 0),
 			Files: make([]string, 0),
+		},
+		Modules: map[string]bool{
+			"backend": true,
+			"main": true,
+			"processor": true,
+			"runner": true,
+			"storage": true,
 		},
 	}
 }

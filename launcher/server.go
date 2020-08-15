@@ -56,7 +56,7 @@ func (s *Server) Start() error {
 	s.status = StatusStarting
 	s.ctx, s.cancel = context.WithCancel(context.Background())
 	needsStorage := true
-
+	
 	for _, mod := range s.config.Mods {
 		if mod == "screepsmod-mongo" {
 			needsStorage = false
@@ -69,15 +69,25 @@ func (s *Server) Start() error {
 	}
 	os.Mkdir("logs", 0777)
 	if needsStorage {
-		go s.runModule(s.ctx, "storage", "screeps-storage", s.config.Env.Storage)
-		time.Sleep(3 * time.Second) // Give storage time to launch
+		if v, ok := s.config.Modules["storage"]; ok && v {
+			go s.runModule(s.ctx, "storage", "screeps-storage", s.config.Env.Storage)
+			time.Sleep(3 * time.Second) // Give storage time to launch
+		}
 	}
-	go s.runModule(s.ctx, "runner", "screeps-engine-runner", s.config.Env.Engine)
-	for i := 0; i < s.config.Processors; i++ {
-		go s.runModule(s.ctx, fmt.Sprintf("processor_%d", i), "screeps-engine-processor", s.config.Env.Engine)
+	if v, ok := s.config.Modules["runner"]; ok && v {
+		go s.runModule(s.ctx, "runner", "screeps-engine-runner", s.config.Env.Engine)
 	}
-	go s.runModule(s.ctx, "main", "screeps-engine-main", s.config.Env.Engine)
-	go s.runModule(s.ctx, "backend", "screeps-backend", s.config.Env.Backend)
+	if v, ok := s.config.Modules["processor"]; ok && v {
+		for i := 0; i < s.config.Processors; i++ {
+			go s.runModule(s.ctx, fmt.Sprintf("processor_%d", i), "screeps-engine-processor", s.config.Env.Engine)
+		}
+	}
+	if v, ok := s.config.Modules["main"]; ok && v {
+		go s.runModule(s.ctx, "main", "screeps-engine-main", s.config.Env.Engine)
+	}
+	if v, ok := s.config.Modules["backend"]; ok && v {
+		go s.runModule(s.ctx, "backend", "screeps-backend", s.config.Env.Backend)
+	}
 	s.status = StatusRunning
 	return nil
 }
