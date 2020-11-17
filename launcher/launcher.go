@@ -54,8 +54,12 @@ func (l *Launcher) Prepare() {
 
 // Upgrade upgrades screeps
 func (l *Launcher) Upgrade() error {
-	os.Remove("yarn.lock")
-	return l.Apply()
+	// os.Remove("yarn.lock")
+	err := l.Apply()
+	if err != nil {
+		return err
+	}
+	return runYarn("up")
 }
 
 // Apply applies config without starting
@@ -100,6 +104,14 @@ func (l *Launcher) Apply() error {
 	if _, err := os.Stat(install.YarnPath); os.IsNotExist(err) {
 		log.Print("Installing Yarn")
 		err = install.Yarn()
+		if err != nil {
+			return err
+		}
+		err = runYarn("set", "version", "berry")
+		if err != nil {
+			return err
+		}
+		err = runYarn("config", "set", "nodeLinker", "node-modules")
 		if err != nil {
 			return err
 		}
@@ -208,8 +220,10 @@ func cmdExists(cmdName string) bool {
 	return err == nil
 }
 
-func runYarn() error {
-	cmd := exec.Command(install.NodePath, install.YarnPath)
+func runYarn(args ...string) error {
+	log.Printf("Exec: yarn %s", strings.Join(args, " "))
+	args = append([]string{install.YarnPath}, args...)
+	cmd := exec.Command(install.NodePath, args...)
 	newPath := filepath.SplitList(os.Getenv("PATH"))
 	cwd, _ := os.Getwd()
 	newPath = append([]string{filepath.Join(cwd, filepath.Dir(install.NodePath))}, newPath...)
