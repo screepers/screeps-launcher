@@ -111,10 +111,6 @@ func (l *Launcher) Apply() error {
 		if err != nil {
 			return err
 		}
-		err = runYarn("config", "set", "nodeLinker", "node-modules")
-		if err != nil {
-			return err
-		}
 	}
 	log.Print("Writing package.json")
 	err = writePackage(l.config)
@@ -122,6 +118,10 @@ func (l *Launcher) Apply() error {
 		return err
 	}
 	log.Print("Running yarn")
+	err = runYarn("config", "set", "nodeLinker", "node-modules")
+	if err != nil {
+		return err
+	}
 	err = runYarn()
 	if err != nil {
 		return err
