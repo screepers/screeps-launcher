@@ -59,7 +59,7 @@ func (l *Launcher) Upgrade() error {
 	if err != nil {
 		return err
 	}
-	return runYarn("up")
+	return runYarn("up", "*")
 }
 
 // Apply applies config without starting
