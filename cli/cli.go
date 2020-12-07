@@ -13,9 +13,16 @@ type ScreepsCLI struct {
 	WelcomeText string
 }
 
-func NewScreepsCLI(host string, port int16) *ScreepsCLI {
+func NewScreepsCLI(host string, port int16, username string, password string) *ScreepsCLI {
 	client := resty.New()
-	client.SetHostURL(fmt.Sprintf("http://%s:%d", host, port))
+	protocol := "http"
+	if port == 443 {
+		protocol = "https"
+	}
+	client.SetHostURL(fmt.Sprintf("%s://%s:%d", protocol, host, port))
+	if username != "" && password != "" {
+		client.SetBasicAuth(username, password)
+	}
 	s := &ScreepsCLI{
 		client: client,
 	}

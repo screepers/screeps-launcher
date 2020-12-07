@@ -25,9 +25,18 @@ type ConfigBackup struct {
 	Files []string `yaml:"files" json:"files"`
 }
 
+// ConfigCli CLI section of config
+type ConfigCli struct {
+	Username string `yaml:"username" json:"username"`
+	Password string `yaml:"password" json:"password"`
+	Host     string `yaml:"host" json:"host"`
+	Port     int16  `yaml:"port" json:"port"`
+}
+
 // Config server config structure
 type Config struct {
 	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
+	Cli           *ConfigCli        `yaml:"cli" json:"cli"`
 	Env           *ConfigEnv        `yaml:"env" json:"env"`
 	Processors    int               `yaml:"processors" json:"processors"`
 	RunnerThreads int               `yaml:"runnerThreads" json:"runnerThreads"`
@@ -38,7 +47,7 @@ type Config struct {
 	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
 	LocalMods     string            `yaml:"localMods" json:"localMods"`
 	Backup        *ConfigBackup     `yaml:"backup" json:"backup"`
-	Modules				map[string]bool		`yaml:"modules" json:"modules"`
+	Modules       map[string]bool   `yaml:"modules" json:"modules"`
 }
 
 // NewConfig Create a new Config
@@ -50,6 +59,12 @@ func NewConfig() *Config {
 		RunnerThreads: int(runners),
 		Version:       "latest",
 		NodeVersion:   "Dubnium",
+		Cli: &ConfigCli{
+			Username: "",
+			Password: "",
+			Host:     "127.0.0.1",
+			Port:     21026,
+		},
 		Env: &ConfigEnv{
 			Shared: map[string]string{
 				"MODFILE":      "mods.json",
@@ -79,11 +94,11 @@ func NewConfig() *Config {
 			Files: make([]string, 0),
 		},
 		Modules: map[string]bool{
-			"backend": true,
-			"main": true,
+			"backend":   true,
+			"main":      true,
 			"processor": true,
-			"runner": true,
-			"storage": true,
+			"runner":    true,
+			"storage":   true,
 		},
 	}
 }

@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -11,18 +12,39 @@ import (
 	"github.com/screepers/screeps-launcher/v1/cli"
 )
 
+var (
+	hostFlag = flag.String("host", "", "CLI Host")
+	portFlag = flag.Int("port", 0, "CLI Port")
+	userFlag = flag.String("username", "", "CLI Username")
+	passFlag = flag.String("password", "", "CLI Password")
+)
+
 func runCli(config *Config) error {
-	host := "localhost"
-	port := 21026
+	host := config.Cli.Host
+	port := config.Cli.Port
+	user := config.Cli.Username
+	pass := config.Cli.Password
 	if v, ok := config.Env.Backend["CLI_HOST"]; ok {
 		host = v
 	}
 	if v, ok := config.Env.Backend["CLI_PORT"]; ok {
 		if i, err := strconv.Atoi(v); err == nil {
-			port = i
+			port = int16(i)
 		}
 	}
-	c := cli.NewScreepsCLI(host, int16(port))
+	if *hostFlag != "" {
+		host = *hostFlag
+	}
+	if *portFlag != 0 {
+		port = int16(*portFlag)
+	}
+	if *userFlag != "" {
+		user = *userFlag
+	}
+	if *passFlag != "" {
+		pass = *passFlag
+	}
+	c := cli.NewScreepsCLI(host, port, user, pass)
 
 	if err := c.Start(); err != nil {
 		log.Fatalf("Error! %v", err)
