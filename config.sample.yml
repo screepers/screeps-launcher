@@ -33,3 +33,8 @@ serverConfig:
   constants:
     TEST_CONSTANT: 123
   tickRate: 1000
+cli: # used for configuring cli client
+  host: testing.hosting.screepspl.us
+  port: 443 # https assumed when using 443
+  username: admin
+  password: notARealPassword
