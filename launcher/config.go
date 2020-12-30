@@ -4,10 +4,13 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
+	"strings"
 
+	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
 )
 
@@ -36,6 +39,7 @@ type ConfigCli struct {
 // Config server config structure
 type Config struct {
 	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
+	SteamKeyFile  string            `yaml:"steamKeyFile" json:"steamKeyFile"`
 	Cli           *ConfigCli        `yaml:"cli" json:"cli"`
 	Env           *ConfigEnv        `yaml:"env" json:"env"`
 	Processors    int               `yaml:"processors" json:"processors"`
@@ -127,6 +131,16 @@ func (c *Config) GetConfig(dir string) (*Config, error) {
 	}
 	if c.RunnerThreads > 0 {
 		c.Env.Engine["RUNNER_THREADS"] = strconv.Itoa(c.RunnerThreads)
+	}
+	if _, err := os.Stat("STEAM_KEY"); c.SteamKeyFile == "" && !os.IsNotExist(err) {
+		c.SteamKeyFile = "STEAM_KEY"
+	}
+	if c.SteamKeyFile != "" {
+		bytes, err := ioutil.ReadFile(c.SteamKeyFile)
+		if err != nil {
+			return c, errors.Wrap(err, "Failed to load steamKeyFile")
+		}
+		c.SteamKey = strings.TrimSpace(string(bytes))
 	}
 	if c.SteamKey != "" {
 		c.Env.Backend["STEAM_KEY"] = c.SteamKey
