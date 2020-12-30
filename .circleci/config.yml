@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-    - image: circleci/golang:1.13
+    - image: cimg/golang:1.13
     steps:
     - checkout
     - restore_cache:
@@ -17,7 +17,7 @@ jobs:
         - "/go/pkg"
   build:
     docker:
-    - image: circleci/golang:1.13
+    - image: cimg/golang:1.13
     steps:
     - checkout
     - restore_cache:
@@ -49,10 +49,9 @@ jobs:
         paths:
         - '*'
   build-docker:
-    docker:
-    - image: docker:18.09
     steps:
-    - setup_remote_docker
+    - setup_remote_docker:
+        version: 19.03.13
     - checkout
     - run:
         name: Build Image
