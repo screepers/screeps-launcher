@@ -6,23 +6,13 @@ jobs:
     - image: cimg/go:1.13
     steps:
     - checkout
-    - restore_cache:
-        keys:
-        - v1-pkg-cache
     - run: go vet -v ./...
     - run: go test -v ./...
-    - save_cache:
-        key: v1-pkg-cache
-        paths:
-        - "/go/pkg"
   build:
     docker:
     - image: cimg/go:1.13
     steps:
     - checkout
-    - restore_cache:
-        keys:
-        - v1-pkg-cache
     - run: go install github.com/mitchellh/gox
     - run: 
         name: "Build (amd64)"
@@ -34,10 +24,6 @@ jobs:
         command: |
           VER=$(git describe --tags)
           gox -ldflags="-X 'github.com/screepers/screeps-launcher/v1/version.BuildTime=$(date)' -X 'github.com/screepers/screeps-launcher/v1/version.BuildVersion=${VER}'" -os="linux" -arch="arm arm64" -output="dist/screeps-launcher_${VER}_{{.OS}}_{{.Arch}}" ./cmd/screeps-launcher/
-    - save_cache:
-        key: v1-pkg-cache
-        paths:
-        - "/go/pkg"
     - store_artifacts:
         path: config.sample.yml
         destination: config.sample.yml
