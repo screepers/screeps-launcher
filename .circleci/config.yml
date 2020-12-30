@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-    - image: cimg/golang:1.13
+    - image: cimg/go:1.13
     steps:
     - checkout
     - restore_cache:
@@ -17,7 +17,7 @@ jobs:
         - "/go/pkg"
   build:
     docker:
-    - image: cimg/golang:1.13
+    - image: cimg/go:1.13
     steps:
     - checkout
     - restore_cache:
