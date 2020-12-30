@@ -49,6 +49,8 @@ jobs:
         paths:
         - '*'
   build-docker:
+    docker:
+    - image: cimg/base:2020.01
     steps:
     - setup_remote_docker:
         version: 19.03.13
