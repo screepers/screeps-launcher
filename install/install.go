@@ -98,8 +98,10 @@ func Node(version string) error {
 		name = strings.TrimSuffix(name, ".tar.gz")
 	}
 	log.Print(name)
-	err = os.Rename(fmt.Sprintf("deps/%s", name), "deps/node")
-	if err != nil {
+	if err := os.RemoveAll("deps/node"); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	if err := os.Rename(fmt.Sprintf("deps/%s", name), "deps/node"); err != nil {
 		return err
 	}
 	return nil
@@ -165,8 +167,10 @@ Loop:
 	os.Remove(file)
 	name := strings.TrimSuffix(file, ".tar.gz")
 	log.Print(name)
-	err = os.Rename(fmt.Sprintf("deps/%s", name), "deps/yarn")
-	if err != nil {
+	if err := os.RemoveAll("deps/yarn"); err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	if err := os.Rename(fmt.Sprintf("deps/%s", name), "deps/yarn"); err != nil {
 		return err
 	}
 	return nil
