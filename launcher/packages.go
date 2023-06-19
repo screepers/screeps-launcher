@@ -13,6 +13,7 @@ type PackageJSON struct {
 	Name         string            `json:"name"`
 	Main         string            `json:"main"`
 	Dependencies map[string]string `json:"dependencies"`
+	Resolutions  map[string]string `json:"resolutions"`
 	Private      bool              `json:"private"`
 }
 
@@ -40,6 +41,7 @@ func writePackage(c *Config) error {
 	}
 	var pack PackageJSON
 	pack.Dependencies = deps
+	pack.Resolutions = c.PinnedPackages
 	pack.Private = true
 	pack.Name = "screeps-private-server"
 	bytes, err := json.MarshalIndent(pack, "", "  ")
