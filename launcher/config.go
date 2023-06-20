@@ -38,20 +38,21 @@ type ConfigCli struct {
 
 // Config server config structure
 type Config struct {
-	SteamKey      string            `yaml:"steamKey" json:"steamKey"`
-	SteamKeyFile  string            `yaml:"steamKeyFile" json:"steamKeyFile"`
-	Cli           *ConfigCli        `yaml:"cli" json:"cli"`
-	Env           *ConfigEnv        `yaml:"env" json:"env"`
-	Processors    int               `yaml:"processors" json:"processors"`
-	RunnerThreads int               `yaml:"runnerThreads" json:"runnerThreads"`
-	Version       string            `yaml:"version" json:"version"`
-	NodeVersion   string            `yaml:"nodeVersion" json:"nodeVersion"`
-	Mods          []string          `yaml:"mods" json:"mods"`
-	Bots          map[string]string `yaml:"bots" json:"bots"`
-	ExtraPackages map[string]string `yaml:"extraPackages" json:"extraPackages"`
-	LocalMods     string            `yaml:"localMods" json:"localMods"`
-	Backup        *ConfigBackup     `yaml:"backup" json:"backup"`
-	Modules       map[string]bool   `yaml:"modules" json:"modules"`
+	SteamKey       string            `yaml:"steamKey" json:"steamKey"`
+	SteamKeyFile   string            `yaml:"steamKeyFile" json:"steamKeyFile"`
+	Cli            *ConfigCli        `yaml:"cli" json:"cli"`
+	Env            *ConfigEnv        `yaml:"env" json:"env"`
+	Processors     int               `yaml:"processors" json:"processors"`
+	RunnerThreads  int               `yaml:"runnerThreads" json:"runnerThreads"`
+	Version        string            `yaml:"version" json:"version"`
+	NodeVersion    string            `yaml:"nodeVersion" json:"nodeVersion"`
+	Mods           []string          `yaml:"mods" json:"mods"`
+	Bots           map[string]string `yaml:"bots" json:"bots"`
+	ExtraPackages  map[string]string `yaml:"extraPackages" json:"extraPackages"`
+	PinnedPackages map[string]string `yaml:"pinnedPackages" json:"pinnedPackages"`
+	LocalMods      string            `yaml:"localMods" json:"localMods"`
+	Backup         *ConfigBackup     `yaml:"backup" json:"backup"`
+	Modules        map[string]bool   `yaml:"modules" json:"modules"`
 }
 
 // NewConfig Create a new Config
@@ -89,10 +90,11 @@ func NewConfig() *Config {
 				"DB_PATH": "db.json",
 			},
 		},
-		LocalMods:     "mods",
-		Mods:          make([]string, 0),
-		Bots:          make(map[string]string),
-		ExtraPackages: make(map[string]string),
+		LocalMods:      "mods",
+		Mods:           make([]string, 0),
+		Bots:           make(map[string]string),
+		ExtraPackages:  make(map[string]string),
+		PinnedPackages: make(map[string]string),
 		Backup: &ConfigBackup{
 			Dirs:  make([]string, 0),
 			Files: make([]string, 0),
