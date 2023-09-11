@@ -94,7 +94,12 @@ func NewConfig() *Config {
 		Mods:           make([]string, 0),
 		Bots:           make(map[string]string),
 		ExtraPackages:  make(map[string]string),
-		PinnedPackages: make(map[string]string),
+		PinnedPackages: map[string]string{
+				"ssri": "8.0.1",
+				"cacache": "16.1.3",
+				"passport-steam": "1.0.17",
+				"minipass-fetch": "3.0.3",
+		},
 		Backup: &ConfigBackup{
 			Dirs:  make([]string, 0),
 			Files: make([]string, 0),
