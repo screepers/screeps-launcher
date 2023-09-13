@@ -1,4 +1,10 @@
 steamKey: <YourSteamKey>
+# Sometimes dependencies change in ways that break screeps-launcher.  To work around those issues, some package versions need to be pinned.  See the current list in the README at https://github.com/screepers/screeps-launcher/ or the specific issue tracking pinned packages: https://github.com/screepers/screeps-launcher/issues/34
+pinnedPackages:
+  ssri: 8.0.1
+  cacache: 16.1.3
+  passport-steam: 1.0.17
+  minipass-fetch: 3.0.3
 env:
   shared:
     MONGO_HOST: localhost
