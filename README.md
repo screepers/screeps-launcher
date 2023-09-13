@@ -22,6 +22,12 @@ that does a step-by-step setup including mongo, redis, and auto start.
 4. Create config.yml (All fields are optional! You can pass STEAM_KEY as an environment variable)
   ```yaml
   steamKey: keyFromStep3
+  # Sometimes dependencies change in ways that break screeps-launcher or the builds it does.  To work around those issues, some package versions need to be pinned.  See the current list in the README at https://github.com/screepers/screeps-launcher/ or the specific issue tracking pinned packages: https://github.com/screepers/screeps-launcher/issues/34
+  pinnedPackages:
+    ssri: 8.0.1
+    cacache: 16.1.3
+    passport-steam: 1.0.17
+    minipass-fetch: 3.0.3
   mods: # Recommended mods
   - screepsmod-auth
   - screepsmod-admin-utils
