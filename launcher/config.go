@@ -96,9 +96,10 @@ func NewConfig() *Config {
 		ExtraPackages:  make(map[string]string),
 		PinnedPackages: map[string]string{
 				"ssri": "8.0.1",
-				"cacache": "16.1.3",
+				"cacache": "15.3.0",
 				"passport-steam": "1.0.17",
-				"minipass-fetch": "3.0.3",
+				"minipass-fetch": "2.1.2",
+				"express-rate-limit": "6.7.0",
 		},
 		Backup: &ConfigBackup{
 			Dirs:  make([]string, 0),

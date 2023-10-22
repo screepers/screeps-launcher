@@ -25,9 +25,10 @@ that does a step-by-step setup including mongo, redis, and auto start.
   # Sometimes dependencies change in ways that break screeps-launcher or the builds it does.  To work around those issues, some package versions need to be pinned.  See the current list in the README at https://github.com/screepers/screeps-launcher/ or the specific issue tracking pinned packages: https://github.com/screepers/screeps-launcher/issues/34
   pinnedPackages:
     ssri: 8.0.1
-    cacache: 16.1.3
+    cacache: 15.3.0
     passport-steam: 1.0.17
-    minipass-fetch: 3.0.3
+    minipass-fetch: 2.1.2
+    express-rate-limit: 6.7.0
   mods: # Recommended mods
   - screepsmod-auth
   - screepsmod-admin-utils
