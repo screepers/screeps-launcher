@@ -107,7 +107,7 @@ func (l *Launcher) Apply() error {
 		if err != nil {
 			return err
 		}
-		err = runYarn("set", "version", "berry")
+		err = runYarn("set", "version", "1.22.21")
 		if err != nil {
 			return err
 		}
