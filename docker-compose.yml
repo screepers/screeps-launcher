@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
 
   mongo:
-    image: mongo
+    image: mongo:5
     volumes:
       - mongo-data:/data/db
     restart: unless-stopped
