@@ -1,6 +1,7 @@
 FROM golang AS builder
 
 ARG ARCH=amd64
+# Use arm64/32 for other architectures.
 
 WORKDIR /app
 COPY . .
