@@ -1,6 +1,10 @@
 version: '3'
 services:
   screeps:
+    build: 
+      context: .
+      args:
+        ARCH: amd64
     image: screepers/screeps-launcher
     volumes:
       - ./config.yml:/screeps/config.yml

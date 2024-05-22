@@ -101,3 +101,6 @@ See each of their documentation on the [ScreepsMods github repository](https://g
 ## Bots
 You can add bots to spawn in by adding either their names or path to the code on your file system in the `config.yml` file.  See config.sample.yml for an example.
 
+## Building for a PI
+
+You can easily build your own docker image for an ARM architecute via the Docker build arg `ARCH`.
