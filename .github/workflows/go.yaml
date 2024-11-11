@@ -20,6 +20,11 @@ jobs:
         run: go vet ./...
       - name: Test
         run: go test ./...
+      - name: Upload sample
+        uses: actions/upload-artifact@v4
+        with:
+          name: config-sample
+          path: ./config.sample.yml
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -43,25 +48,26 @@ jobs:
       - name: Install dependencies
         run: go get ./cmd/screeps-launcher
       - name: Build
-        run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o ./bin/screeps-launcher_${{ matrix.os }}_${{ matrix.arch }} ./cmd/screeps-launcher
+        run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o ./screeps-launcher_${{ matrix.os }}_${{ matrix.arch }} ./cmd/screeps-launcher
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: screeps-launcher
-          path: ./bin/
+          name: screeps-launcher-${{ matrix.os }}-${{ matrix.arch }}
+          path: ./screeps-launcher_${{ matrix.os }}_${{ matrix.arch }}
   release:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: screeps-launcher
-          path: ./bin
+      - uses: actions/download-artifact@v4
+      - name: Rename Windows Files
+        run: for F in screeps-launcher_windows*; do mv $F $F.exe; done
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/*
+          files: |
+            screeps-launcher*
+            config.sample.yml
       - name: Upload binaries
         uses: actions/upload-release-asset@v1
         env:
