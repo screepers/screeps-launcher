@@ -1,9 +1,4 @@
-.git/
-.github/
-.vscode/
-dist/
-examples/
-test/
-.env
 config.yml
 !.circleci/config.yml
+test
+dist
