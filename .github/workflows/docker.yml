@@ -14,11 +14,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  push-image:
+  build-and-push-images:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+      attestations: write
+      id-token: write
     defaults:
       run:
         working-directory: './Store'
