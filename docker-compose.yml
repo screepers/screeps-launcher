@@ -1,7 +1,7 @@
 version: '3'
 services:
   screeps:
-    build: 
+    build:
       context: .
       args:
         ARCH: amd64
@@ -10,7 +10,7 @@ services:
       - ./config.yml:/screeps/config.yml
       - screeps-data:/screeps
     ports:
-      - 21025:21025/tcp
+      - "${SCREEPS_LAUNCHER_HOST:-0.0.0.0}:21025:21025/tcp"
     environment:
       MONGO_HOST: mongo
       REDIS_HOST: redis

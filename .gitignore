@@ -1,3 +1,4 @@
+.env
 config.yml
 !.circleci/config.yml
 test*
