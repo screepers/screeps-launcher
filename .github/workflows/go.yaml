@@ -15,7 +15,7 @@ jobs:
         with:
           go-version: '${{ env.go-version }}'
       - name: Install dependencies
-        run: go get .
+        run: go get ./cmd/screeps-launcher
       - name: Vet
         run: go vet ./...
       - name: Test
@@ -41,7 +41,7 @@ jobs:
         with:
           go-version: '${{ env.go-version }}'
       - name: Install dependencies
-        run: go get .
+        run: go get ./cmd/screeps-launcher
       - name: Build
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o ./bin/screeps-launcher_${{ matrix.os }}_${{ matrix.arch }} ./cmd/screeps-launcher
       - name: Upload binary
