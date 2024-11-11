@@ -1,4 +1,6 @@
-config.yml
-!.circleci/config.yml
-test
-dist
+# Ignore all files
+*
+# Except go files
+!go.mod
+!go.sum
+!**/*.go
