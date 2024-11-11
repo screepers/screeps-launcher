@@ -41,7 +41,7 @@ jobs:
         uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
         with:
           images: |
-            screepers/${{ env.IMAGE_NAME }}
+            ${{ env.IMAGE_NAME }}
             ghcr.io/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         uses: docker/build-push-action@94d76d3bc1409736cb5dc1ada9502bec3a72973c

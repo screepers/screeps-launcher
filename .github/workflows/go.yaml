@@ -27,7 +27,7 @@ jobs:
       matrix:
         os: [linux, darwin, windows]
         arch: [amd64, arm, arm64]
-        eclude:
+        exclude:
         - os: windows
           arch: arm
         - os: darwin
