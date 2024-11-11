@@ -1,7 +1,7 @@
 version: '3'
 services:
   screeps:
-    build: 
+    build:
       context: .
       args:
         ARCH: amd64
@@ -14,19 +14,45 @@ services:
     environment:
       MONGO_HOST: mongo
       REDIS_HOST: redis
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "sh", "-c", "curl --fail --silent http://127.0.0.1:21025/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 5s
+      retries: 3
 
   mongo:
-    image: mongo
+    image: mongo:8
     volumes:
       - mongo-data:/data/db
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "sh", "-c", "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017/test --quiet"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 5s
+      retries: 3
 
   redis:
-    image: redis
+    image: redis:7
     volumes:
       - redis-data:/data
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 5s
+      retries: 3
 
 volumes:
   redis-data:

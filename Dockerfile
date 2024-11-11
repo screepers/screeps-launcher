@@ -1,4 +1,4 @@
-FROM golang AS builder
+FROM golang:1.23-bookworm AS builder
 
 ARG ARCH=amd64
 # Use arm64/32 for other architectures.
