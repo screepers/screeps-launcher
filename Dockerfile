@@ -5,7 +5,8 @@ ARG ARCH=amd64
 
 WORKDIR /app
 COPY . .
-RUN CGO_ENABLED=0 \
+RUN --mount=type=cache,target=/go/pkg/mod \
+    CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=${ARCH} \
     go build -o screeps-launcher ./cmd/screeps-launcher
