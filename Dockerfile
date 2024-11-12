@@ -12,10 +12,20 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
 FROM buildpack-deps:buster
-RUN groupadd --gid 1000 screeps \
-  && useradd --uid 1000 --gid screeps --shell /bin/bash --create-home screeps \
-  && mkdir /screeps && chown screeps.screeps /screeps
-USER screeps
+
+ARG UID=1000
+ARG GID=1000
+RUN <<-EOT bash
+    if [[ "${GID}" != "0" ]] ; then
+        groupadd --gid ${GID} screeps
+    fi
+    if [[ "${UID}" != "0" ]] ; then
+        useradd --uid ${UID} --gid ${GID} --shell /bin/bash --create-home screeps
+    fi
+    mkdir /screeps && chown ${UID}:${GID} /screeps
+EOT
+
+USER ${UID}:${GID}
 VOLUME /screeps
 WORKDIR /screeps
 COPY --from=builder /app/screeps-launcher /usr/bin/
