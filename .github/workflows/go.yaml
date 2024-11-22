@@ -60,6 +60,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
       - name: Rename Windows Files
         run: for F in screeps-launcher_windows*; do mv $F $F.exe; done
       - name: Create release
