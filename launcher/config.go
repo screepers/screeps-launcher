@@ -100,6 +100,7 @@ func NewConfig() *Config {
 				"passport-steam": "1.0.17",
 				"minipass-fetch": "2.1.2",
 				"express-rate-limit": "6.7.0",
+			        "psl": "1.10.0",
 		},
 		Backup: &ConfigBackup{
 			Dirs:  make([]string, 0),
