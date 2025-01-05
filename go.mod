@@ -9,7 +9,7 @@ require (
 	github.com/go-resty/resty/v2 v2.16.2
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.3
-	github.com/otiai10/copy v1.14.0
+	github.com/otiai10/copy v1.14.1
 	github.com/pkg/errors v0.9.1
 	github.com/tcnksm/go-latest v0.0.0-20170313132115-e3007ae9052e
 	go.mongodb.org/mongo-driver v1.17.1
@@ -27,6 +27,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mattn/go-tty v0.0.7 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/otiai10/mint v1.6.3 // indirect
 	github.com/pkg/term v1.2.0-beta.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
