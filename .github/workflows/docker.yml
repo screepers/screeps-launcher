@@ -26,7 +26,7 @@ jobs:
         working-directory: './Store'
     steps:
       - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Log in to Docker Hub
         uses: docker/login-action@7ca345011ac4304463197fac0e56eab1bc7e6af0
         with:
