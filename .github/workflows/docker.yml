@@ -50,7 +50,7 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}
       - name: Build and push Docker image
         id: push
-        uses: docker/build-push-action@5e99dacf67635c4f273e532b9266ddb609b3025a
+        uses: docker/build-push-action@9e436ba9f2d7bcd1d038c8e55d039d37896ddc5d
         with:
           context: .
           push: true
