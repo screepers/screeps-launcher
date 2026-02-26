@@ -21,7 +21,7 @@ jobs:
       - name: Test
         run: go test ./...
       - name: Upload sample
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: config-sample
           path: ./config.sample.yml
@@ -50,7 +50,7 @@ jobs:
       - name: Build
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o ./screeps-launcher_${{ matrix.os }}_${{ matrix.arch }} ./cmd/screeps-launcher
       - name: Upload binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: screeps-launcher-${{ matrix.os }}-${{ matrix.arch }}
           path: ./screeps-launcher_${{ matrix.os }}_${{ matrix.arch }}
@@ -59,7 +59,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
       - name: Rename Windows Files
