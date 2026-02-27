@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/c-bata/go-prompt v0.2.6
-	github.com/cavaliercoder/grab v2.0.0+incompatible
+	github.com/cavaliercoder/grab v3.0.1+incompatible
 	github.com/go-redis/redis/v7 v7.4.1
 	github.com/go-resty/resty/v2 v2.17.2
 	github.com/gorilla/mux v1.8.1
