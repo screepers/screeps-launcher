@@ -8,9 +8,10 @@ pinnedPackages:
   express-rate-limit: 6.7.0
 env:
   shared:
-    MONGO_HOST: localhost
-    REDIS_HOST: localhost
+    MONGO_HOST: mongo
+    REDIS_HOST: redis
 version: latest
+nodeVersion: v22.9.0
 mods:
 - screepsmod-mongo
 - screepsmod-auth

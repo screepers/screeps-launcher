@@ -63,7 +63,7 @@ func NewConfig() *Config {
 		Processors:    cores,
 		RunnerThreads: int(runners),
 		Version:       "latest",
-		NodeVersion:   "Erbium",
+		NodeVersion:   "v22.9.0",
 		Cli: &ConfigCli{
 			Username: "",
 			Password: "",

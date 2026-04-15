@@ -11,7 +11,10 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GOARCH=${ARCH} \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
-FROM buildpack-deps:buster
+FROM buildpack-deps:bookworm
+
+ENV PYTHON=/usr/bin/python3 \
+    npm_config_python=/usr/bin/python3
 
 ARG UID=1000
 ARG GID=1000

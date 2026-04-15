@@ -3,6 +3,7 @@ package launcher
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -124,9 +125,11 @@ func (s *Server) runModule(ctx context.Context, name string, module string, env 
 		}
 		lenv = append(lenv, fmt.Sprintf("PATH=%s", strings.Join(newPath, string(filepath.ListSeparator))))
 		fmt.Fprintf(f, "==== %s Starting ====\n", name)
+		stdout := io.MultiWriter(os.Stdout, f)
+		stderr := io.MultiWriter(os.Stderr, f)
 		cmd := exec.CommandContext(ctx, filepath.Join("node_modules", ".bin", module))
-		cmd.Stdout = f
-		cmd.Stderr = f
+		cmd.Stdout = stdout
+		cmd.Stderr = stderr
 		cmd.Env = lenv
 		err := cmd.Run()
 		log.Printf("[%s] Exited with error: %v", name, err)

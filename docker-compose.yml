@@ -1,4 +1,3 @@
-version: '3'
 services:
   screeps:
     build:
@@ -7,7 +6,7 @@ services:
         ARCH: amd64
         UID: 1000
         GID: 1000
-    image: screepers/screeps-launcher
+    # image: screepers/screeps-launcher
     volumes:
       - ./config.yml:/screeps/config.yml
       - screeps-data:/screeps
@@ -23,7 +22,13 @@ services:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "sh", "-c", "curl --fail --silent http://127.0.0.1:21025/"]
+      test:
+        [
+          "CMD-SHELL",
+          "sh",
+          "-c",
+          "curl --fail --silent http://127.0.0.1:21025/",
+        ]
       interval: 30s
       timeout: 5s
       start_period: 5s
@@ -36,7 +41,13 @@ services:
       - mongo-data:/data/db
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "sh", "-c", "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017/test --quiet"]
+      test:
+        [
+          "CMD-SHELL",
+          "sh",
+          "-c",
+          'echo ''db.runCommand("ping").ok'' | mongosh localhost:27017/test --quiet',
+        ]
       interval: 30s
       timeout: 5s
       start_period: 5s

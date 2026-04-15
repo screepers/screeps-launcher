@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
@@ -28,6 +29,8 @@ type NodeVersion struct {
 	Modules string
 	Lts     interface{}
 }
+
+var exactNodeVersionPattern = regexp.MustCompile(`^\d+\.\d+\.\d+$`)
 
 func download(dest string, url string) error {
 	client := grab.NewClient()
@@ -235,14 +238,24 @@ func GetNodeVersion(version string) (string, error) {
 		return "", err
 	}
 
-	ver := version
-	if version[0:1] != "v" {
-		ver = getWantedVersion(version, versions)
-	}
+	ver := resolveRequestedNodeVersion(version, versions)
 	if ver == "" {
 		return "", fmt.Errorf("Could not find node version: %s", version)
 	}
 	return ver, nil
+}
+
+func resolveRequestedNodeVersion(version string, versions []NodeVersion) string {
+	if version == "" {
+		return ""
+	}
+	if exactNodeVersionPattern.MatchString(version) {
+		return "v" + version
+	}
+	if strings.HasPrefix(version, "v") {
+		return version
+	}
+	return getWantedVersion(version, versions)
 }
 
 func getWantedVersion(version string, versions []NodeVersion) string {

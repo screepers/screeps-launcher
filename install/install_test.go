@@ -45,3 +45,25 @@ func TestGetWantedVersion(t *testing.T) {
 		}
 	}
 }
+
+func TestResolveRequestedNodeVersion(t *testing.T) {
+	versions := []NodeVersion{
+		NodeVersion{Lts: "Erbium", Version: "v12.22.12"},
+		NodeVersion{Lts: "Jod", Version: "v22.9.0"},
+	}
+	tables := []struct {
+		ver string
+		ret string
+	}{
+		{"22.9.0", "v22.9.0"},
+		{"v22.9.0", "v22.9.0"},
+		{"Jod", "v22.9.0"},
+		{"", ""},
+	}
+	for _, table := range tables {
+		ret := resolveRequestedNodeVersion(table.ver, versions)
+		if ret != table.ret {
+			t.Errorf("resolveRequestedNodeVersion(%s, %v) was incorrect, got: %s, want: %s", table.ver, versions, ret, table.ret)
+		}
+	}
+}
