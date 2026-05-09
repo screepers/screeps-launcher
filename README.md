@@ -78,10 +78,16 @@ Choose the _Private Server_ tab and connect using those options:
 - Server password: _<leave blank, unless configured otherwise>_
 
 ## Docker
-Docker builds are published to Dockerhub as `screepers/screeps-launcher`
+
+Docker builds are published to GitHub Container Registry and Docker Hub.
+The images are **multi-architecture**, supporting:
+- `linux/amd64` (Standard Desktop/Server)
+- `linux/arm64` (Raspberry Pi 4/5, Apple Silicon)
+- `linux/arm/v7` (Raspberry Pi 3, 32-bit NAS)
+
 Quickstart:
 1. Create config file in an empty folder (`/srv/screeps` is used for this example)
-2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 screepers/screeps-launcher`
+2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 ghcr.io/screepers/screeps-launcher`
 3. Done! 
 
 ## Mods
@@ -101,6 +107,6 @@ See each of their documentation on the [ScreepsMods github repository](https://g
 ## Bots
 You can add bots to spawn in by adding either their names or path to the code on your file system in the `config.yml` file.  See config.sample.yml for an example.
 
-## Building for a PI
+## Building for other architectures
 
-You can easily build your own docker image for an ARM architecute via the Docker build arg `ARCH`.
+While multi-arch images are provided automatically, you can build your own for other architectures using the Docker `buildx` platform support. The `Dockerfile` uses standard `TARGETARCH` arguments for cross-compilation.
