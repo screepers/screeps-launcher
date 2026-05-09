@@ -53,7 +53,7 @@ jobs:
         with:
           images: |
             ${{ env.IMAGE_NAME }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ghcr.io/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
         id: push

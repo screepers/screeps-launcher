@@ -87,7 +87,7 @@ The images are **multi-architecture**, supporting:
 
 Quickstart:
 1. Create config file in an empty folder (`/srv/screeps` is used for this example)
-2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 ghcr.io/screepers/screeps-launcher`
+2. Run `docker run --restart=unless-stopped --name MyScreepsServer -v /srv/screeps:/screeps -p 21025:21025 screepers/screeps-launcher`
 3. Done! 
 
 ## Mods
