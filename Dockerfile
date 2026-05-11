@@ -1,14 +1,17 @@
-FROM golang:1.26-bookworm AS builder
+FROM --platform=$BUILDPLATFORM golang:1.26-bookworm AS builder
 
-ARG ARCH=amd64
-# Use arm64/32 for other architectures.
+# TARGETARCH and TARGETVARIANT are provided by buildx
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 WORKDIR /app
 COPY . .
 RUN --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=${ARCH} \
+    GOOS=${TARGETOS:-linux} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT#v} \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
 FROM buildpack-deps:buster
