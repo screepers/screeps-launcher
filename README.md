@@ -49,6 +49,13 @@ that does a step-by-step setup including mongo, redis, and auto start.
 
 You can use `screeps-launcher cli` in the same folder for CLI access
 
+### Node.js Version
+The launcher automatically manages its own Node.js installation. By default, it uses **Node 24 (Krypton)**. If you need a different version, you can specify it in your `config.yml`:
+
+```yaml
+nodeVersion: Krypton # or "20", "Iron", "v22.11.0", etc.
+```
+
 ### Other options
 
 There are several extra arguments that can be used to manage the install:
