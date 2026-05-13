@@ -3,7 +3,7 @@ name: Build and Release
 on: [push]
 
 env:
-  go-version: 1.22.x
+  go-version: 1.23.x
 
 jobs:
   test:
