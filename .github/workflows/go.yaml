@@ -70,12 +70,3 @@ jobs:
           files: |
             screeps-launcher*
             config.sample.yml
-      - name: Upload binaries
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin
-          asset_name: screeps-launcher_${{ matrix.os }}_${{ matrix.arch }}
-          asset_content_type: application/octet-stream
