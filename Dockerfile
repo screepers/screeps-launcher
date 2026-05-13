@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GOARM=${TARGETVARIANT#v} \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
-FROM buildpack-deps:buster
+FROM buildpack-deps:bookworm
 
 ARG UID=1000
 ARG GID=1000
