@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM golang:1.26-bookworm AS builder
+FROM --platform=$BUILDPLATFORM golang:1.26-trixie AS builder
 
 # TARGETARCH and TARGETVARIANT are provided by buildx
 ARG TARGETOS
@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GOARM=${TARGETVARIANT#v} \
     go build -o screeps-launcher ./cmd/screeps-launcher
 
-FROM buildpack-deps:buster
+FROM buildpack-deps:trixie
 
 ARG UID=1000
 ARG GID=1000
