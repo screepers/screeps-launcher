@@ -65,7 +65,7 @@ jobs:
       - name: Rename Windows Files
         run: for F in screeps-launcher_windows*; do mv $F $F.exe; done
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             screeps-launcher*
