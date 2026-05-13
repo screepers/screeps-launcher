@@ -49,6 +49,13 @@ that does a step-by-step setup including mongo, redis, and auto start.
 
 You can use `screeps-launcher cli` in the same folder for CLI access
 
+### Node.js Version
+The launcher automatically manages its own Node.js installation. By default, it uses **Node 24 (Krypton)**. If you need a different version, you can specify it in your `config.yml`:
+
+```yaml
+nodeVersion: Krypton # or "20", "Iron", "v22.11.0", etc.
+```
+
 ### Other options
 
 There are several extra arguments that can be used to manage the install:
@@ -103,6 +110,9 @@ A few mods of interests:
 
 See each of their documentation on the [ScreepsMods github repository](https://github.com/ScreepsMods).
 
+## Logs
+
+Logs of individual components, including mods, are stored in `/screeps/logs` inside the container. 
 
 ## Bots
 You can add bots to spawn in by adding either their names or path to the code on your file system in the `config.yml` file.  See config.sample.yml for an example.
