@@ -1,0 +1,43 @@
+name: Update gomod2nix
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'go.mod'
+      - 'go.sum'
+
+permissions:
+  contents: write
+  pull-requests: write
+  merge-groups: write
+
+jobs:
+  update-gomod2nix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Generate gomod2nix
+        run: nix develop -c gomod2nix generate
+
+      - name: Create PR with changes
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update gomod2nix'
+          title: 'chore: update gomod2nix'
+          body: |
+            Auto-generated PR to update gomod2nix after go.mod changes.
+          branch: gomod2nix-update
+          delete-branch: true
+
+      - name: Enable Auto-merge
+        if: steps.cpr.outputs.pull-request-number != ''
+        uses: peter-evans/enable-pull-request-automerge@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash

@@ -15,12 +15,14 @@
           };
           screeps-launcher = pkgs.buildGoApplication {
             pname = "screeps-launcher";
-            version = "1.16.0";
+            version = 
+            if self ? shortRev 
+            then self.shortRev + pkgs.lib.optionalString self.dirty "-dirty"
+            else "dirty";
             src = ./.;
             modules = ./gomod2nix.toml;
             subPackages = [ "cmd/screeps-launcher" ];
-            # try 1.26, 1.23 was previously broken due to modules.txt not being generated
-            go = pkgs.go_1_26; 
+            go = pkgs.go;
           };
         in
         {
