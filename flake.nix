@@ -19,8 +19,8 @@
             src = ./.;
             modules = ./gomod2nix.toml;
             subPackages = [ "cmd/screeps-launcher" ];
-            # force 1.22, 1.23 is currently broken due to modules.txt not being generated
-            go = pkgs.go_1_22; 
+            # try 1.26, 1.23 was previously broken due to modules.txt not being generated
+            go = pkgs.go_1_26; 
           };
         in
         {
