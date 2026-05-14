@@ -1,6 +1,7 @@
 name: Update gomod2nix
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
