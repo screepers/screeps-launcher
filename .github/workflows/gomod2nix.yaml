@@ -11,7 +11,6 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  merge-groups: write
 
 jobs:
   update-gomod2nix:
