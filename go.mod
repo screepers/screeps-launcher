@@ -13,7 +13,8 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/tcnksm/go-latest v0.0.0-20170313132115-e3007ae9052e
 	go.mongodb.org/mongo-driver v1.17.9
-	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v2 v2.2.4
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
