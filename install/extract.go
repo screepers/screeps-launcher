@@ -36,6 +36,9 @@ func extractTarGz(dest string, src string) error {
 			continue
 		}
 		target := filepath.Join(dest, header.Name)
+		if !within(dest, target) {
+			return fmt.Errorf("%s: illegal file path", target)
+		}
 		dir := filepath.Dir(target)
 		if _, err := os.Stat(dir); os.IsNotExist(err) {
 			if err := os.MkdirAll(dir, 0755); err != nil {
@@ -59,12 +62,34 @@ func extractTarGz(dest string, src string) error {
 			}
 			f.Close()
 		case tar.TypeSymlink:
+			if !withinLink(dest, dir, header.Linkname) {
+				return fmt.Errorf("%s: illegal link target", header.Linkname)
+			}
 			err := os.Symlink(header.Linkname, target)
 			if err != nil {
 				return err
 			}
 		}
 	}
+}
+
+// within reports whether path stays inside dest.
+func within(dest string, path string) bool {
+	dest = filepath.Clean(dest)
+	if path == dest {
+		return true
+	}
+	return strings.HasPrefix(path, dest+string(os.PathSeparator))
+}
+
+// withinLink reports whether a link created in dir with the given target stays
+// inside dest. Relative targets are resolved against dir, the same way the
+// extracted link resolves them when it is read.
+func withinLink(dest string, dir string, linkname string) bool {
+	if filepath.IsAbs(linkname) {
+		return within(dest, filepath.Clean(linkname))
+	}
+	return within(dest, filepath.Join(dir, linkname))
 }
 
 func extractZip(dest string, src string) error {
